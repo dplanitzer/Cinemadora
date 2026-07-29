@@ -21,7 +21,7 @@ actor TMDBImageRepository : ImageRepository {
     
     func image(for basePath: String, usage: ImageUsage, size: ImageSizeClass) async throws -> UIImage {
         
-        guard let url = await imageUrl(for: basePath, usage: usage, size: size) else { throw URLError(.cannotConnectToHost) }
+        let url = try await imageUrl(for: basePath, usage: usage, size: size)
         
         if let image = cache.image(for: url) {
             return image
@@ -55,9 +55,9 @@ actor TMDBImageRepository : ImageRepository {
         }
     }
 
-    private func imageUrl(for basePath: String, usage: ImageUsage, size: ImageSizeClass) async -> URL? {
+    private func imageUrl(for basePath: String, usage: ImageUsage, size: ImageSizeClass) async throws -> URL {
         
-        guard let config = await ensureConfiguration() else { return nil }
+        let config = try await ensureConfiguration()
         let usageSizes: [String]
         let sizeClassIndex: Int
         
@@ -72,7 +72,7 @@ actor TMDBImageRepository : ImageRepository {
             usageSizes = config.images.logoSizes
         }
         
-        guard usageSizes.count > 0 else { return nil }
+        guard usageSizes.count > 0 else { throw URLError(.badURL) }
         
         switch size {
         case .small:
@@ -88,15 +88,19 @@ actor TMDBImageRepository : ImageRepository {
             sizeClassIndex = max(usageSizes.count - 1, 0)
         }
         
-        return URL(string: "\(config.images.secureBaseUrl)\(usageSizes[sizeClassIndex])\(basePath)")
+        if let url = URL(string: "\(config.images.secureBaseUrl)\(usageSizes[sizeClassIndex])\(basePath)") {
+            return url
+        } else {
+            throw URLError(.badURL)
+        }
     }
     
-    private func ensureConfiguration() async -> TMDBConfiguration? {
+    private func ensureConfiguration() async throws -> TMDBConfiguration {
         
         if cachedConfiguration == nil {
-            cachedConfiguration = try? await service.fetch(from: "https://api.themoviedb.org/3/configuration", type: TMDBConfiguration.self)
+            cachedConfiguration = try await service.fetch(from: "https://api.themoviedb.org/3/configuration", type: TMDBConfiguration.self)
         }
-        return cachedConfiguration
+        return cachedConfiguration!
     }
 }
 
