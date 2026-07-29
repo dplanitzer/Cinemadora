@@ -9,16 +9,18 @@ import SwiftUI
 
 struct MovieCardView: View {
     
-    private let movie: Movie
+    @State private var model: MovieViewModel
     private let imageRep: ImageRepository
     
     
-    init(_ movie: Movie, _ imageRep: ImageRepository) {
-        self.movie = movie
+    init(_ model: MovieViewModel, _ imageRep: ImageRepository) {
+        self.model = model
         self.imageRep = imageRep
     }
     
     var body: some View {
+        
+        let movie = model.movie
         
         VStack {
             Text(movie.title)
@@ -27,10 +29,26 @@ struct MovieCardView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 10.0)
             
+            
+            if model.hasFetchedGenres {
+                HStack(spacing: 10) {
+                    ForEach(movie.genreIds, id: \.self) { genreId in
+                        GenreView(model.genres[genreId]!)
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.leading, 10.0)
+                .padding(.bottom, 10)
+            }
+            
+            
             HStack {
-                RatingView(movie)
+                RatingView(voteAverage: movie.voteAverage, voteCount: movie.voteCount)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 10.0)
+                
+                Spacer()
                 
                 Image("tmdb_short")
                     .resizable()
@@ -40,10 +58,14 @@ struct MovieCardView: View {
             }
             .padding(.bottom, 10)
             
+            
             MovieImageView(movie, imageRep)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .foregroundColor(.primary)
+        .task {
+            await model.fetchGenres()
+        }
     }
 }
 
@@ -55,7 +77,7 @@ struct MovieCardView: View {
 
     Group {
         if let movie = movieState {
-            MovieCardView(movie, imageRep)
+            MovieCardView(MovieViewModel(movie, movieRep), imageRep)
         } else {
             ProgressView()
         }

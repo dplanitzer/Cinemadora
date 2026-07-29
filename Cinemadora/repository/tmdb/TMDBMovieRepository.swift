@@ -7,9 +7,11 @@
 
 import Foundation
 
-final class TMDBMovieRepository : MovieRepository {
+actor TMDBMovieRepository : MovieRepository {
     
     private let service: TMDBService
+    private var genres: Dictionary<Int, String> = [:]
+
     
     init(_ service: TMDBService) {
         self.service = service
@@ -26,7 +28,20 @@ final class TMDBMovieRepository : MovieRepository {
         case .topRated: listName = "top_rated"
         }
 
-        let r = try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(langReg)&page=\(pageNum + 1)", type: MovieListResponse<Movie>.self)
+        let r = try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(langReg)&page=\(pageNum + 1)", type: MovieListPage<Movie>.self)
         return ListPage(movies: r.results, pageCount: r.totalPageCount)
+    }
+    
+    func genre(for id: Int) async throws -> String? {
+
+        if genres.isEmpty {
+            let r = try await service.fetch(from: "https://api.themoviedb.org/3/genre/movie/list", type: GenreList.self)
+
+            for genre in r.genres {
+                genres[genre.id] = genre.name
+            }
+        }
+        
+        return genres[id]
     }
 }

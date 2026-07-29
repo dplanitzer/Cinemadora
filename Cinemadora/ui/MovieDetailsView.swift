@@ -33,7 +33,7 @@ struct MovieDetailsView: View {
                         .bold()
                         .padding(.bottom, 18)
                     
-                    RatingView(movie)
+                    RatingView(voteAverage: movie.voteAverage, voteCount: movie.voteCount)
                         .padding(.bottom, 14)
                     
                     Text("Release Year")

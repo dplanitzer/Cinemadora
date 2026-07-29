@@ -9,11 +9,12 @@ import SwiftUI
 
 struct RatingView: View {
     
-    private let movie: Movie
+    private let voteAverage: Double
+    private let voteCount: Int?
     
-    
-    init(_ movie: Movie) {
-        self.movie = movie
+    init(voteAverage: Double, voteCount: Int? = nil) {
+        self.voteAverage = voteAverage
+        self.voteCount = voteCount
     }
     
     var body: some View {
@@ -25,27 +26,41 @@ struct RatingView: View {
                 .frame(width: 16)
                 .foregroundColor(.yellow)
                 
-            Text("**\(ratingText)/10**  \(votesText) votes")
-                .font(.footnote)
-                .underline()
+            if let votesTxt = votesText {
+                Text("**\(ratingText)/10**  \(votesTxt) votes")
+                    .font(.footnote)
+                    .underline()
+            } else {
+                Text("**\(ratingText)/10**")
+                    .font(.footnote)
+                    .underline()
+            }
         }
     }
     
     private var ratingText: String {
         
-        return String(format: "%.1f", movie.voteAverage)
+        return String(format: "%.1f", voteAverage)
     }
     
-    private var votesText: String {
+    private var votesText: String? {
         
-        if movie.voteCount < 1000 {
-            return String(movie.voteCount)
+        guard let voteCount = voteCount else { return nil }
+        
+        if voteCount < 1000 {
+            return String(voteCount)
         }
-        else if movie.voteCount < 1000_000 {
-            return "\(movie.voteCount / 1000)k"
+        else if voteCount < 1000_000 {
+            return "\(voteCount / 1000)k"
         }
         else {
-            return "\(movie.voteCount / 1000_000)m"
+            return "\(voteCount / 1000_000)m"
         }
     }
+}
+
+
+#Preview {
+    RatingView(voteAverage: 0.87, voteCount: 10_345)
+        .preferredColorScheme(.dark)
 }

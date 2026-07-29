@@ -59,7 +59,7 @@ struct MovieListView: View {
                 LazyHStack(spacing: 16) {
                     ForEach(model.movies) { movie in
                         NavigationLink(value: movie) {
-                            MovieCardView(movie, imageRep)
+                            MovieCardView(model.makeMovieViewModel(for: movie), imageRep)
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                                 .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                                     content

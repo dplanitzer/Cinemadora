@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class TMDBService {
+nonisolated final class TMDBService : Sendable {
     
     private let token: String
     

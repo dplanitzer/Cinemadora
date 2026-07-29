@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct MovieListResponse<Element: Decodable> : Decodable {
+nonisolated struct MovieListPage<Element: Decodable> : Decodable {
     
     let page: Int
     let results: [Element]

@@ -21,4 +21,6 @@ struct ListPage {
 protocol MovieRepository {
     
     func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage
+    
+    func genre(for id: Int) async throws -> String?
 }
