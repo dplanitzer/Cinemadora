@@ -12,14 +12,16 @@ class MovieListViewModel {
     
     private let listName: ListName
     private let movieRep: MovieRepository
+    private let imageRep: ImageRepository
     
     private var nextPage = 0
     private var pageCount = 1
 
     
-    init(_ listName: ListName, _ movieRep: MovieRepository) {
+    init(_ listName: ListName, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
         self.listName = listName
         self.movieRep = movieRep
+        self.imageRep = imageRep
     }
 
     var movies: [Movie] = []
@@ -58,14 +60,6 @@ class MovieListViewModel {
     // basic information about the movie.
     func makeMovieViewModel(for movie: Movie) -> MovieViewModel {
         
-        return MovieViewModel(movie, movieRep)
-    }
-    
-    // Create a details view model for the given movie. The provided movie will be used
-    // as an initial set of data to show to the user while the detail page is waiting
-    // for the movie details to come down the wire.
-    func makeDetailsViewModel(for movie: Movie) -> MovieDetailsViewModel {
-        
-        return MovieDetailsViewModel(movie, movieRep)
+        return MovieViewModel(movie, movieRep, imageRep)
     }
 }

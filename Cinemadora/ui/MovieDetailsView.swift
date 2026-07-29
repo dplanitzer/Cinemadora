@@ -9,20 +9,20 @@ import SwiftUI
 
 struct MovieDetailsView: View {
     
-    @State private var model: MovieDetailsViewModel
-    private let imageRep: ImageRepository
+    @State private var model: MovieViewModel
+    @State private var detailsModel: MovieDetailsViewModel
 
     
-    init(_ model: MovieDetailsViewModel, _ imageRep: ImageRepository) {
+    init(_ model: MovieViewModel) {
         self.model = model
-        self.imageRep = imageRep
+        self.detailsModel = model.makeDetailsViewModel(for: model.movie)
     }
     
     var body: some View {
         let movie = model.movie
         
         VStack {
-            MovieImageView(model.movie, imageRep)
+            MovieImageView(model)
                 .frame(maxWidth: .infinity)
                 .frame(height: 300)
 
@@ -66,7 +66,7 @@ struct MovieDetailsView: View {
 
     Group {
         if let movie = movieState {
-            MovieDetailsView(MovieDetailsViewModel(movie, movieRep), imageRep)
+            MovieDetailsView(MovieViewModel(movie, movieRep, imageRep))
         } else {
             ProgressView()
         }

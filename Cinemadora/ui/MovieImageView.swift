@@ -9,19 +9,19 @@ import SwiftUI
 
 struct MovieImageView: View {
     
-    @State private var model: ImageViewModel
+    @State private var model: MovieViewModel
     private let cornerRadius: CGFloat
 
     
-    init(_ movie: Movie, _ imageRep: ImageRepository, cornerRadius: CGFloat = 20.0) {
-        self.model = ImageViewModel(movie, imageRep, usage: .poster, size: .large)
+    init(_ model: MovieViewModel, cornerRadius: CGFloat = 20.0) {
+        self.model = model
         self.cornerRadius = cornerRadius
     }
     
     var body: some View {
         
         Group {
-            switch model.state {
+            switch model.posterImage {
             case .idle:
                 Color.gray.opacity(0.2)
                 
@@ -40,7 +40,7 @@ struct MovieImageView: View {
             }
         }
         .task {
-            await model.fetchImage()
+            await model.fetchPosterImage()
         }
     }
 }
@@ -53,7 +53,7 @@ struct MovieImageView: View {
 
     Group {
         if let movie = movieState {
-            MovieImageView(movie, imageRep)
+            MovieImageView(MovieViewModel(movie, movieRep, imageRep))
         } else {
             ProgressView()
         }

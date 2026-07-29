@@ -41,7 +41,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
-				model/ImageViewModel.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
 				repository/Genre.swift,
@@ -68,7 +67,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
-				model/ImageViewModel.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
 				repository/Genre.swift,

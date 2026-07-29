@@ -10,12 +10,10 @@ import SwiftUI
 struct MovieCardView: View {
     
     @State private var model: MovieViewModel
-    private let imageRep: ImageRepository
     
     
-    init(_ model: MovieViewModel, _ imageRep: ImageRepository) {
+    init(_ model: MovieViewModel) {
         self.model = model
-        self.imageRep = imageRep
     }
     
     var body: some View {
@@ -59,7 +57,7 @@ struct MovieCardView: View {
             .padding(.bottom, 10)
             
             
-            MovieImageView(movie, imageRep)
+            MovieImageView(model)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .foregroundColor(.primary)
@@ -77,7 +75,7 @@ struct MovieCardView: View {
 
     Group {
         if let movie = movieState {
-            MovieCardView(MovieViewModel(movie, movieRep), imageRep)
+            MovieCardView(MovieViewModel(movie, movieRep, imageRep))
         } else {
             ProgressView()
         }

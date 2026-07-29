@@ -10,12 +10,10 @@ import SwiftUI
 struct MovieListView: View {
     
     @State private var model: MovieListViewModel
-    private let imageRep: ImageRepository
 
     
-    init(_ model: MovieListViewModel, _ imageRep: ImageRepository) {
+    init(_ model: MovieListViewModel) {
         self.model = model
-        self.imageRep = imageRep
     }
     
     var body: some View {
@@ -59,7 +57,7 @@ struct MovieListView: View {
                 LazyHStack(spacing: 16) {
                     ForEach(model.movies) { movie in
                         NavigationLink(value: movie) {
-                            MovieCardView(model.makeMovieViewModel(for: movie), imageRep)
+                            MovieCardView(model.makeMovieViewModel(for: movie))
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                                 .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                                     content
@@ -84,7 +82,7 @@ struct MovieListView: View {
                 }
                 .scrollTargetLayout()
                 .navigationDestination(for: Movie.self) { movie in
-                    MovieDetailsView(model.makeDetailsViewModel(for: movie), imageRep)
+                    MovieDetailsView(model.makeMovieViewModel(for: movie))
                 }
             }
             .scrollTargetBehavior(.viewAligned)
@@ -103,9 +101,8 @@ struct MovieListView: View {
 
 
 #Preview {
-    let model = MovieListViewModel(.popular, MockMovieRepository())
-    let imageRep = MockImageRepository()
+    let model = MovieListViewModel(.popular, MockMovieRepository(), MockImageRepository())
     
-    MovieListView(model, imageRep)
+    MovieListView(model)
         .preferredColorScheme(.dark)
 }

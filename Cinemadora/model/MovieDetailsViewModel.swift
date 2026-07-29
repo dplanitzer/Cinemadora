@@ -10,12 +10,12 @@ import UIKit
 @Observable
 class MovieDetailsViewModel {
         
-    private let movieRepository: MovieRepository
+    private let movieRep: MovieRepository
     
     
     init(_ movie: Movie, _ movieRep: MovieRepository) {
         self.movie = movie
-        self.movieRepository = movieRep
+        self.movieRep = movieRep
     }
     
     let movie: Movie
