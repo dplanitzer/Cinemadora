@@ -59,6 +59,7 @@
 				ui/GenreView.swift,
 				ui/MovieCardView.swift,
 				ui/MovieDetailsView.swift,
+				ui/MovieGenresView.swift,
 				ui/MovieImageView.swift,
 				ui/RatingView.swift,
 			);
@@ -86,6 +87,7 @@
 				ui/GenreView.swift,
 				ui/MovieCardView.swift,
 				ui/MovieDetailsView.swift,
+				ui/MovieGenresView.swift,
 				ui/MovieImageView.swift,
 				ui/RatingView.swift,
 			);

@@ -33,11 +33,9 @@ struct MovieDetailsView: View {
                         .bold()
                         .padding(.bottom, 18)
                     
-                    if model.hasFetchedGenres {
-                        GenreListView(model.genres)
+                    MovieGenresView(model)
                         .padding(.leading, 10.0)
                         .padding(.bottom, 14)
-                    }
 
                     RatingView(voteAverage: movie.voteAverage, voteCount: movie.voteCount)
                         .padding(.bottom, 14)
@@ -60,9 +58,6 @@ struct MovieDetailsView: View {
                         .font(.body)
                 }
             }
-        }
-        .task {
-            await model.fetchGenres()
         }
     }
 }

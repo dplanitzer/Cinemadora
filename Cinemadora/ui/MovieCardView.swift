@@ -28,12 +28,10 @@ struct MovieCardView: View {
                 .padding(.leading, 10.0)
             
             
-            if model.hasFetchedGenres {
-                GenreListView(model.genres)
+            MovieGenresView(model)
                 .padding(.leading, 10.0)
                 .padding(.bottom, 10)
-            }
-            
+
             
             HStack {
                 RatingView(voteAverage: movie.voteAverage, voteCount: movie.voteCount)
@@ -55,9 +53,6 @@ struct MovieCardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .foregroundColor(.primary)
-        .task {
-            await model.fetchGenres()
-        }
     }
 }
 
