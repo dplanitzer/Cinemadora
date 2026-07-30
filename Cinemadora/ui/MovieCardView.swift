@@ -30,8 +30,8 @@ struct MovieCardView: View {
             
             if model.hasFetchedGenres {
                 HStack(spacing: 10) {
-                    ForEach(movie.genreIds, id: \.self) { genreId in
-                        GenreView(model.genres[genreId]!)
+                    ForEach(model.genres, id: \.self) { genre in
+                        GenreView(genre)
                     }
                     
                     Spacer()

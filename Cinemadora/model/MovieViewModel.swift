@@ -47,19 +47,21 @@ final class MovieViewModel {
     
     var hasFetchedGenres: Bool = false
     
-    var genres: [Int : String] = [:]
+    // Loaded genres, sorted by name
+    var genres: [String] = []
 
     func fetchGenres() async {
         
         guard !hasFetchedGenres else { return }
         
         do {
-            genres = [:]
+            genres = []
             for genreId in movie.genreIds {
                 if let genreName = try await movieRep.genre(for: genreId) {
-                    genres[genreId] = genreName
+                    genres.append(genreName)
                 }
             }
+            genres.sort()
         } catch {
         }
         hasFetchedGenres = true
