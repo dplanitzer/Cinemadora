@@ -24,7 +24,19 @@ class MovieListViewModel {
         self.imageRep = imageRep
     }
 
-    var movies: [Movie] = []
+    var errorDescription = ""
+
+    var movieViewModels: [MovieViewModel] = []
+    
+    func movieViewModel(for id: Int) -> MovieViewModel? {
+        
+        for mvm in movieViewModels {
+            if mvm.id == id {
+                return mvm
+            }
+        }
+        return nil
+    }
     
     var isLoading = false
     
@@ -32,8 +44,6 @@ class MovieListViewModel {
         return nextPage < pageCount
     }
     
-    var errorDescription = ""
-
     // Fetches the next page from movie list that this vide model represents. Does nothing
     // if no more data exists.
     func fetchMore() async {
@@ -45,7 +55,10 @@ class MovieListViewModel {
         
         do {
             let r = try await movieRep.fetchListPage(listName, nextPage)
-            movies.append(contentsOf: r.movies)
+            
+            for movie in r.movies {
+                movieViewModels.append(makeMovieViewModel(for: movie))
+            }
             pageCount = r.pageCount
             nextPage += 1
             
@@ -58,7 +71,7 @@ class MovieListViewModel {
 
     // Create a regular view model for the given movie. This view model provides
     // basic information about the movie.
-    func makeMovieViewModel(for movie: Movie) -> MovieViewModel {
+    private func makeMovieViewModel(for movie: Movie) -> MovieViewModel {
         
         return MovieViewModel(movie, movieRep, imageRep)
     }

@@ -16,7 +16,7 @@ enum ImageState : Equatable {
 
 
 @Observable
-final class MovieViewModel {
+final class MovieViewModel : Identifiable {
     
     private let movieRep: MovieRepository
     private let imageRep: ImageRepository
@@ -28,8 +28,12 @@ final class MovieViewModel {
         self.imageRep = imageRep
     }
 
-    let movie: Movie
+    var id: Int {
+        return movie.id
+    }
 
+    let movie: Movie
+    
     
     var posterImage: ImageState = .idle
 

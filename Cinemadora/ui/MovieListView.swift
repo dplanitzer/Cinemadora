@@ -20,7 +20,7 @@ struct MovieListView: View {
         
         NavigationStack {
             
-            if model.movies.isEmpty {
+            if model.movieViewModels.isEmpty {
                 showMovieListPlaceholder()
             }
             else {
@@ -55,9 +55,9 @@ struct MovieListView: View {
         VStack(spacing: 20) {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 16) {
-                    ForEach(model.movies) { movie in
-                        NavigationLink(value: movie) {
-                            MovieCardView(model.makeMovieViewModel(for: movie))
+                    ForEach(model.movieViewModels) { movieViewModel in
+                        NavigationLink(value: movieViewModel.id) {
+                            MovieCardView(movieViewModel)
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                                 .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                                     content
@@ -65,7 +65,7 @@ struct MovieListView: View {
                                         .opacity(phase.isIdentity ? 1.0 : 0.6)
                                 }
                                 .onAppear {
-                                    if movie == model.movies.last {
+                                    if movieViewModel.id == model.movieViewModels.last?.id {
                                         Task {
                                             await model.fetchMore()
                                         }
@@ -81,8 +81,8 @@ struct MovieListView: View {
                     }
                 }
                 .scrollTargetLayout()
-                .navigationDestination(for: Movie.self) { movie in
-                    MovieDetailsView(model.makeMovieViewModel(for: movie))
+                .navigationDestination(for: Int.self) { id in
+                    MovieDetailsView(model.movieViewModel(for: id)!)
                 }
             }
             .scrollTargetBehavior(.viewAligned)
