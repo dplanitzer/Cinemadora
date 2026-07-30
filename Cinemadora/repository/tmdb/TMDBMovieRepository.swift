@@ -28,7 +28,7 @@ actor TMDBMovieRepository : MovieRepository {
         case .topRated: listName = "top_rated"
         }
 
-        let r = try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(langReg)&page=\(pageNum + 1)", type: MovieListPage<Movie>.self)
+        let r = try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(langReg)&page=\(pageNum + 1)", type: MovieListPage.self)
         return ListPage(movies: r.results, pageCount: r.totalPageCount)
     }
     

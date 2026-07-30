@@ -14,7 +14,7 @@ actor MockMovieRepository : MovieRepository {
     
     func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage {
         
-        let r = try await fetch(from: "popular_movies", type: MovieListPage<Movie>.self)
+        let r = try await fetch(from: "popular_movies", type: MovieListPage.self)
 
         return ListPage(movies: r.results, pageCount: r.totalPageCount)
     }

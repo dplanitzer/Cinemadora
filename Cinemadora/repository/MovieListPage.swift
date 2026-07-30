@@ -7,10 +7,10 @@
 
 import Foundation
 
-nonisolated struct MovieListPage<Element: Decodable> : Decodable {
+nonisolated struct MovieListPage : Decodable {
     
     let page: Int
-    let results: [Element]
+    let results: [Movie]
     let totalPageCount: Int
     let totalResultCount: Int
     
