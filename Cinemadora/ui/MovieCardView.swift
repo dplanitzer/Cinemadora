@@ -29,18 +29,9 @@ struct MovieCardView: View {
             
             
             if model.hasFetchedGenres {
-                ScrollView(.horizontal) {
-                    HStack(spacing: 10) {
-                        ForEach(model.genres, id: \.self) { genre in
-                            GenreView(genre)
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.leading, 10.0)
-                    .padding(.bottom, 10)
-                }
-                .scrollIndicators(.hidden)
+                GenreListView(model.genres)
+                .padding(.leading, 10.0)
+                .padding(.bottom, 10)
             }
             
             
