@@ -32,6 +32,11 @@ actor TMDBMovieRepository : MovieRepository {
         return ListPage(movies: r.results, pageCount: r.totalPageCount)
     }
     
+    func movieDetails(for id: Int) async throws -> MovieDetails {
+        
+        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(id)", type: MovieDetails.self)
+    }
+    
     func genre(for id: Int) async throws -> String? {
 
         if genres.isEmpty {

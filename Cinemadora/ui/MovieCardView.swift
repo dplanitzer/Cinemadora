@@ -34,9 +34,11 @@ struct MovieCardView: View {
 
             
             HStack {
-                RatingView(voteAverage: movie.voteAverage, voteCount: movie.voteCount)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 10.0)
+                if let voteAvg = movie.voteAverage {
+                    RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 10.0)
+                }
                 
                 Spacer()
                 
@@ -60,11 +62,10 @@ struct MovieCardView: View {
 #Preview {
     @State @Previewable var movieState: Movie? = nil
     let movieRep = MockMovieRepository()
-    let imageRep = MockImageRepository()
 
     Group {
         if let movie = movieState {
-            MovieCardView(MovieViewModel(movie, movieRep, imageRep))
+            MovieCardView(MovieViewModel(movie, movieRep, MockImageRepository()))
         } else {
             ProgressView()
         }

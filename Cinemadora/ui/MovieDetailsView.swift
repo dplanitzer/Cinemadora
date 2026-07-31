@@ -37,25 +37,31 @@ struct MovieDetailsView: View {
                         .padding(.leading, 10.0)
                         .padding(.bottom, 14)
 
-                    RatingView(voteAverage: movie.voteAverage, voteCount: movie.voteCount)
-                        .padding(.bottom, 14)
+                    if let voteAvg = movie.voteAverage {
+                        RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
+                            .padding(.bottom, 14)
+                    }
                     
-                    Text("Release Year")
-                        .font(.headline)
-                        .bold()
-                        .padding(.bottom, 4)
-                    
-                    Text(movie.releaseDate)
-                        .font(.body)
-                        .padding(.bottom, 14)
+                    if let releaseDate = movie.releaseDate, !releaseDate.isEmpty {
+                        Text("Release Date")
+                            .font(.headline)
+                            .bold()
+                            .padding(.bottom, 4)
+                        
+                        Text(releaseDate)
+                            .font(.body)
+                            .padding(.bottom, 14)
+                    }
 
-                    Text("Overview")
-                        .font(.headline)
-                        .bold()
-                        .padding(.bottom, 4)
-                    
-                    Text(movie.overview)
-                        .font(.body)
+                    if let overview = movie.overview, !overview.isEmpty {
+                        Text("Overview")
+                            .font(.headline)
+                            .bold()
+                            .padding(.bottom, 4)
+                        
+                        Text(overview)
+                            .font(.body)
+                    }
                 }
             }
         }
@@ -66,11 +72,10 @@ struct MovieDetailsView: View {
 #Preview {
     @State @Previewable var movieState: Movie? = nil
     let movieRep = MockMovieRepository()
-    let imageRep = MockImageRepository()
 
     Group {
         if let movie = movieState {
-            MovieDetailsView(MovieViewModel(movie, movieRep, imageRep))
+            MovieDetailsView(MovieViewModel(movie, movieRep, MockImageRepository()))
         } else {
             ProgressView()
         }

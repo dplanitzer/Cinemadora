@@ -22,5 +22,7 @@ protocol MovieRepository {
     
     func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage
     
+    func movieDetails(for id: Int) async throws -> MovieDetails
+    
     func genre(for id: Int) async throws -> String?
 }

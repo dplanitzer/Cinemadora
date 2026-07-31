@@ -35,6 +35,9 @@ struct MovieImageView: View {
                     .scaledToFit()
                     .clipShape(.rect(cornerRadius: cornerRadius))
                 
+            case .fallback:
+                Color.black
+
             case .failed:
                 Color.gray.opacity(0.3)
             }
@@ -49,11 +52,10 @@ struct MovieImageView: View {
 #Preview {
     @State @Previewable var movieState: Movie? = nil
     let movieRep = MockMovieRepository()
-    let imageRep = MockImageRepository()
 
     Group {
         if let movie = movieState {
-            MovieImageView(MovieViewModel(movie, movieRep, imageRep))
+            MovieImageView(MovieViewModel(movie, movieRep, MockImageRepository()))
         } else {
             ProgressView()
         }

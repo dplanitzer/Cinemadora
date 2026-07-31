@@ -37,11 +37,10 @@ struct MovieGenresView: View {
 #Preview {
     @State @Previewable var movieState: Movie? = nil
     let movieRep = MockMovieRepository()
-    let imageRep = MockImageRepository()
 
     Group {
         if let movie = movieState {
-            MovieGenresView(MovieViewModel(movie, movieRep, imageRep))
+            MovieGenresView(MovieViewModel(movie, movieRep, MockImageRepository()))
         } else {
             ProgressView()
         }

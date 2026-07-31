@@ -101,8 +101,6 @@ struct MovieListView: View {
 
 
 #Preview {
-    let model = MovieListViewModel(.popular, MockMovieRepository(), MockImageRepository())
-    
-    MovieListView(model)
+    MovieListView(MovieListViewModel(.popular, MockMovieRepository(), MockImageRepository()))
         .preferredColorScheme(.dark)
 }

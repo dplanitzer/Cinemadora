@@ -10,8 +10,9 @@ import UIKit
 enum ImageState : Equatable {
     case idle
     case loading
-    case loaded(image: UIImage)
-    case failed(error: String)
+    case loaded(image: UIImage)     // loaded the origina image successfully, show it
+    case fallback                   // no original image was specified (url == null), show a fallback instead
+    case failed(error: String)      // loading the origina image failed, show a broken image indicator or a fallback
 }
 
 
@@ -39,12 +40,16 @@ final class MovieViewModel : Identifiable {
 
     func fetchPosterImage() async {
         
-        posterImage = .loading
-        
-        do {
-            posterImage = .loaded(image: try await imageRep.image(for: movie.posterPath, usage: .poster, size: .large))
-        } catch {
-            posterImage = .failed(error: error.localizedDescription)
+        if let posterPath = movie.posterPath {
+            posterImage = .loading
+            
+            do {
+                posterImage = .loaded(image: try await imageRep.image(for: posterPath, usage: .poster, size: .large))
+            } catch {
+                posterImage = .failed(error: error.localizedDescription)
+            }
+        } else {
+            posterImage = .fallback
         }
     }
 

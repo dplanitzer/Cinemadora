@@ -18,7 +18,12 @@ actor MockMovieRepository : MovieRepository {
 
         return ListPage(movies: r.results, pageCount: r.totalPageCount)
     }
-    
+
+    func movieDetails(for id: Int) async throws -> MovieDetails {
+
+        return try await fetch(from: "star_wars_movie_details", type: MovieDetails.self)
+    }
+
     func genre(for id: Int) async throws -> String? {
 
         if genres.isEmpty {
@@ -31,7 +36,7 @@ actor MockMovieRepository : MovieRepository {
         
         return genres[id]
     }
-    
+
     private func fetch<T: Decodable>(from fileName: String, type: T.Type) async throws -> T {
         
         guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
