@@ -54,7 +54,7 @@ class MovieListViewModel {
         errorDescription = ""
         
         do {
-            let r = try await movieRep.fetchListPage(listName, nextPage)
+            let r = try await movieRep.fetchMovieListPage(listName, nextPage)
             
             for movie in r.results {
                 movieViewModels.append(makeMovieViewModel(for: movie))

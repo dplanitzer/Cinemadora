@@ -12,16 +12,21 @@ actor MockMovieRepository : MovieRepository {
     private var genres: Dictionary<Int, String> = [:]
     
     
-    func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
+    func fetchMovieListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
         
         return try await fetch(from: "popular_movies", type: ListPage<Movie>.self)
     }
 
-    func movieDetails(for id: Int) async throws -> MovieDetails {
+    func movieDetails(for movieId: Int) async throws -> MovieDetails {
 
         return try await fetch(from: "star_wars_movie_details", type: MovieDetails.self)
     }
 
+    func fetchReviewsListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Review> {
+     
+        return try await fetch(from: "reviews", type: ListPage<Review>.self)
+    }
+    
     func genre(for id: Int) async throws -> String? {
 
         if genres.isEmpty {
