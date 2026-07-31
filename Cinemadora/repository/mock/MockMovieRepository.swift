@@ -32,6 +32,11 @@ actor MockMovieRepository : MovieRepository {
         return try await fetch(from: "popular_movies", type: ListPage<Movie>.self)
     }
     
+    func fetchCredits(_ movieId: Int) async throws -> Credits {
+        
+        return try await fetch(from: "credits", type: Credits.self)
+    }
+    
     func genre(for id: Int) async throws -> String? {
 
         if genres.isEmpty {
