@@ -21,5 +21,7 @@ protocol MovieRepository {
     
     func fetchReviewsListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Review>
 
+    func fetchSimilarMoviesListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie>
+
     func genre(for id: Int) async throws -> String?
 }

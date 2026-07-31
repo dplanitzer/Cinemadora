@@ -43,6 +43,13 @@ actor TMDBMovieRepository : MovieRepository {
         return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/reviews?language=\(langReg)&page=\(pageNum + 1)", type: ListPage<Review>.self)
     }
     
+    func fetchSimilarMoviesListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie> {
+
+        let langReg = NSLocale.preferredLanguages.first ?? "en-US"
+
+        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/similar?language=\(langReg)&page=\(pageNum + 1)", type: ListPage<Movie>.self)
+    }
+    
     func genre(for id: Int) async throws -> String? {
 
         if genres.isEmpty {
