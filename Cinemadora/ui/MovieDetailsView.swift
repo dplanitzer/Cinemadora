@@ -82,6 +82,6 @@ struct MovieDetailsView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        movieState = try! await movieRep.fetchListPage(.popular, 1).movies.first!
+        movieState = try! await movieRep.fetchListPage(.popular, 1).results.first!
     }
 }

@@ -56,10 +56,10 @@ class MovieListViewModel {
         do {
             let r = try await movieRep.fetchListPage(listName, nextPage)
             
-            for movie in r.movies {
+            for movie in r.results {
                 movieViewModels.append(makeMovieViewModel(for: movie))
             }
-            pageCount = r.pageCount
+            pageCount = r.totalPageCount
             nextPage += 1
             
         } catch {

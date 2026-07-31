@@ -12,11 +12,9 @@ actor MockMovieRepository : MovieRepository {
     private var genres: Dictionary<Int, String> = [:]
     
     
-    func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage {
+    func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
         
-        let r = try await fetch(from: "popular_movies", type: MovieListPage.self)
-
-        return ListPage(movies: r.results, pageCount: r.totalPageCount)
+        return try await fetch(from: "popular_movies", type: ListPage<Movie>.self)
     }
 
     func movieDetails(for id: Int) async throws -> MovieDetails {

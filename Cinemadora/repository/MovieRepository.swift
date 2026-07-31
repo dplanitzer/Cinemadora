@@ -13,14 +13,9 @@ enum ListName {
     case topRated
 }
 
-struct ListPage {
-    let movies: [Movie]
-    let pageCount: Int
-}
-
 protocol MovieRepository {
     
-    func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage
+    func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage<Movie>
     
     func movieDetails(for id: Int) async throws -> MovieDetails
     

@@ -17,7 +17,7 @@ actor TMDBMovieRepository : MovieRepository {
         self.service = service
     }
     
-    func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage {
+    func fetchListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
         
         let langReg = NSLocale.preferredLanguages.first ?? "en-US"
         let listName: String
@@ -28,8 +28,7 @@ actor TMDBMovieRepository : MovieRepository {
         case .topRated: listName = "top_rated"
         }
 
-        let r = try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(langReg)&page=\(pageNum + 1)", type: MovieListPage.self)
-        return ListPage(movies: r.results, pageCount: r.totalPageCount)
+        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(langReg)&page=\(pageNum + 1)", type: ListPage.self)
     }
     
     func movieDetails(for id: Int) async throws -> MovieDetails {

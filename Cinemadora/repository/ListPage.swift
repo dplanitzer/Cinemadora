@@ -1,5 +1,5 @@
 //
-//  MovieListResponse.swift
+//  ListPage.swift
 //  Cinemadora
 //
 //  Created by Dietmar Planitzer on 7/22/26.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-nonisolated struct MovieListPage : Decodable {
+nonisolated struct ListPage<T: Decodable & Sendable> : Decodable {
     
     let page: Int
-    let results: [Movie]
+    let results: [T]
     let totalPageCount: Int
     let totalResultCount: Int
     
