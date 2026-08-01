@@ -24,9 +24,9 @@ class MovieListViewModel {
         self.imageRep = imageRep
     }
 
-    var errorDescription = ""
+    private(set) var errorDescription = ""
 
-    var movieViewModels: [MovieViewModel] = []
+    private(set) var movieViewModels: [MovieViewModel] = []
     
     func movieViewModel(for id: Int) -> MovieViewModel? {
         
@@ -38,7 +38,7 @@ class MovieListViewModel {
         return nil
     }
     
-    var isLoading = false
+    private(set) var isLoading = false
     
     var hasMore: Bool {
         return nextPage < pageCount
@@ -54,7 +54,7 @@ class MovieListViewModel {
         errorDescription = ""
         
         do {
-            let r = try await movieRep.fetchMovieListPage(listName, nextPage)
+            let r = try await movieRep.fetchMovieListPage(for: listName, nextPage)
             
             for movie in r.results {
                 movieViewModels.append(makeMovieViewModel(for: movie))

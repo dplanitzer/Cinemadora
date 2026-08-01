@@ -11,12 +11,20 @@ import UIKit
 class MovieDetailsViewModel {
         
     private let movieRep: MovieRepository
+    private let movieId: Int
     
     
-    init(_ movie: Movie, _ movieRep: MovieRepository) {
-        self.movie = movie
+    init(_ movieId: Int, _ movieRep: MovieRepository) {
+        self.movieId = movieId
         self.movieRep = movieRep
     }
     
-    let movie: Movie
+    private(set) var details: MovieDetails?
+    
+    func fetchDetails() async throws {
+        
+        if details == nil {
+            details = try await movieRep.fetchMovieDetails(for: movieId)
+        }
+    }
 }

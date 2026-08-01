@@ -17,7 +17,7 @@ actor TMDBMovieRepository : MovieRepository {
         self.service = service
     }
     
-    func fetchMovieListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
+    func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
         
         let langReg = NSLocale.preferredLanguages.first ?? "en-US"
         let listName: String
@@ -31,26 +31,26 @@ actor TMDBMovieRepository : MovieRepository {
         return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(langReg)&page=\(pageNum + 1)", type: ListPage<Movie>.self)
     }
     
-    func movieDetails(for movieId: Int) async throws -> MovieDetails {
+    func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails {
         
         return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)", type: MovieDetails.self)
     }
     
-    func fetchReviewsListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Review> {
+    func fetchReviewsListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Review> {
 
         let langReg = NSLocale.preferredLanguages.first ?? "en-US"
 
         return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/reviews?language=\(langReg)&page=\(pageNum + 1)", type: ListPage<Review>.self)
     }
     
-    func fetchSimilarMoviesListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie> {
+    func fetchSimilarMoviesListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie> {
 
         let langReg = NSLocale.preferredLanguages.first ?? "en-US"
 
         return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/similar?language=\(langReg)&page=\(pageNum + 1)", type: ListPage<Movie>.self)
     }
     
-    func fetchCredits(_ movieId: Int) async throws -> Credits {
+    func fetchCredits(for movieId: Int) async throws -> Credits {
         
         return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/credits", type: Credits.self)
     }

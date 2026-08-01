@@ -47,6 +47,6 @@ struct MovieGenresView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        movieState = try! await movieRep.fetchMovieListPage(.popular, 1).results.first!
+        movieState = try! await movieRep.fetchMovieListPage(for: .popular, 1).results.first!
     }
 }

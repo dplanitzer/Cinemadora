@@ -15,15 +15,15 @@ enum ListName {
 
 protocol MovieRepository {
     
-    func fetchMovieListPage(_ list: ListName, _ pageNum: Int) async throws -> ListPage<Movie>
+    func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie>
     
-    func movieDetails(for movieId: Int) async throws -> MovieDetails
+    func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails
     
-    func fetchReviewsListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Review>
+    func fetchReviewsListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Review>
 
-    func fetchSimilarMoviesListPage(_ movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie>
+    func fetchSimilarMoviesListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie>
 
-    func fetchCredits(_ movieId: Int) async throws -> Credits
+    func fetchCredits(for movieId: Int) async throws -> Credits
     
     func genre(for id: Int) async throws -> String?
 }

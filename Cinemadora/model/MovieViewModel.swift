@@ -36,7 +36,7 @@ final class MovieViewModel : Identifiable {
     let movie: Movie
     
     
-    var posterImage: ImageState = .idle
+    private(set) var posterImage: ImageState = .idle
 
     func fetchPosterImage() async {
         
@@ -54,10 +54,10 @@ final class MovieViewModel : Identifiable {
     }
 
     
-    var hasFetchedGenres: Bool = false
+    private(set) var hasFetchedGenres: Bool = false
     
     // Loaded genres, sorted by name
-    var genres: [String] = []
+    private(set) var genres: [String] = []
 
     func fetchGenres() async {
         
@@ -83,6 +83,6 @@ final class MovieViewModel : Identifiable {
     // for the movie details to come down the wire.
     func makeDetailsViewModel(for movie: Movie) -> MovieDetailsViewModel {
         
-        return MovieDetailsViewModel(movie, movieRep)
+        return MovieDetailsViewModel(movie.id, movieRep)
     }
 }
