@@ -22,7 +22,7 @@ struct MovieDetailsView: View {
         let movie = model.movie
         
         VStack {
-            MovieImageView(model)
+            AsyncImageView(model.posterImage, cornerRadius: 20.0)
                 .frame(maxWidth: .infinity)
                 .frame(height: 300)
 

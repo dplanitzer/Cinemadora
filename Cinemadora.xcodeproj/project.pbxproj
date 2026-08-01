@@ -41,6 +41,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
+				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
 				repository/Credits.swift,
@@ -58,12 +59,12 @@
 				repository/tmdb/TMDBImageRepository.swift,
 				repository/tmdb/TMDBMovieRepository.swift,
 				repository/tmdb/TMDBService.swift,
+				ui/AsyncImageView.swift,
 				ui/GenreListView.swift,
 				ui/GenreView.swift,
 				ui/MovieCardView.swift,
 				ui/MovieDetailsView.swift,
 				ui/MovieGenresView.swift,
-				ui/MovieImageView.swift,
 				ui/RatingView.swift,
 			);
 			target = 5554A71D30117B5A001C8C5D /* CinemadoraTests */;
@@ -72,6 +73,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
+				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
 				repository/Credits.swift,
@@ -89,12 +91,12 @@
 				repository/tmdb/TMDBImageRepository.swift,
 				repository/tmdb/TMDBMovieRepository.swift,
 				repository/tmdb/TMDBService.swift,
+				ui/AsyncImageView.swift,
 				ui/GenreListView.swift,
 				ui/GenreView.swift,
 				ui/MovieCardView.swift,
 				ui/MovieDetailsView.swift,
 				ui/MovieGenresView.swift,
-				ui/MovieImageView.swift,
 				ui/RatingView.swift,
 			);
 			target = 5554A72730117B5A001C8C5D /* CinemadoraUITests */;

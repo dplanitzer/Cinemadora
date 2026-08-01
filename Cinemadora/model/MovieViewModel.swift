@@ -7,15 +7,6 @@
 
 import UIKit
 
-enum ImageState : Equatable {
-    case idle
-    case loading
-    case loaded(image: UIImage)     // loaded the origina image successfully, show it
-    case fallback                   // no original image was specified (url == null), show a fallback instead
-    case failed(error: String)      // loading the origina image failed, show a broken image indicator or a fallback
-}
-
-
 @Observable
 final class MovieViewModel : Identifiable {
     
@@ -27,6 +18,7 @@ final class MovieViewModel : Identifiable {
         self.movie = movie
         self.movieRep = movieRep
         self.imageRep = imageRep
+        self.posterImage = ImageLocator(imageRep, movie.posterPath, .poster)
     }
 
     var id: Int {
@@ -35,23 +27,7 @@ final class MovieViewModel : Identifiable {
 
     let movie: Movie
     
-    
-    private(set) var posterImage: ImageState = .idle
-
-    func fetchPosterImage() async {
-        
-        if let posterPath = movie.posterPath {
-            posterImage = .loading
-            
-            do {
-                posterImage = .loaded(image: try await imageRep.image(for: posterPath, usage: .poster, size: .large))
-            } catch {
-                posterImage = .failed(error: error.localizedDescription)
-            }
-        } else {
-            posterImage = .fallback
-        }
-    }
+    let posterImage: ImageLocator
 
     
     private(set) var hasFetchedGenres: Bool = false

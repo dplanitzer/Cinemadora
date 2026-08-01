@@ -51,7 +51,7 @@ struct MovieCardView: View {
             .padding(.bottom, 10)
             
             
-            MovieImageView(model)
+            AsyncImageView(model.posterImage, cornerRadius: 20.0)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .foregroundColor(.primary)
