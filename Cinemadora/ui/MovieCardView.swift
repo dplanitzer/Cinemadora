@@ -20,39 +20,35 @@ struct MovieCardView: View {
         
         let movie = model.movie
         
-        VStack {
-            Text(movie.title)
-                .font(.title)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 10.0)
-            
-            
-            MovieGenresView(model)
-                .padding(.leading, 10.0)
-                .padding(.bottom, 10)
-
-            
-            HStack {
-                if let voteAvg = movie.voteAverage {
-                    RatingView(voteAverage: voteAvg)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 10.0)
+        VStack(spacing: 18) {
+            VStack(spacing: 18) {
+                Text(movie.title)
+                    .font(.title)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                
+                MovieGenresView(model)
+                
+                
+                HStack {
+                    if let voteAvg = movie.voteAverage {
+                        RatingView(voteAverage: voteAvg)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    
+                    Spacer()
+                    
+                    Image("tmdb_short")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 70)
                 }
-                
-                Spacer()
-                
-                Image("tmdb_short")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 70)
-                    .padding(.trailing, 10.0)
             }
-            .padding(.bottom, 10)
+            .padding(.horizontal, 10.0)
             
             
-            AsyncImageView(model.posterImage, cornerRadius: 20.0)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            AsyncImageView(model.posterImage, cornerRadius: 60.0)
         }
         .foregroundColor(.primary)
     }
