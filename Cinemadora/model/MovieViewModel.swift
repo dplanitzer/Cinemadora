@@ -5,7 +5,7 @@
 //  Created by Dietmar Planitzer on 7/29/26.
 //
 
-import UIKit
+import Foundation
 
 @Observable
 final class MovieViewModel : Identifiable {
@@ -54,11 +54,13 @@ final class MovieViewModel : Identifiable {
     
     
     
-    // Create a details view model for the given movie. The provided movie will be used
-    // as an initial set of data to show to the user while the detail page is waiting
-    // for the movie details to come down the wire.
-    func makeDetailsViewModel(for movie: Movie) -> MovieDetailsViewModel {
+    func makeDetailsViewModel() -> MovieDetailsViewModel {
         
         return MovieDetailsViewModel(movie.id, movieRep)
+    }
+    
+    func makeCreditsViewModel() -> CreditsViewModel {
+        
+        return CreditsViewModel(movie.id, movieRep, imageRep)
     }
 }

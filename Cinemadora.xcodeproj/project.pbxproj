@@ -41,6 +41,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
+				model/CreditsViewModel.swift,
 				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
@@ -60,6 +61,7 @@
 				repository/tmdb/TMDBMovieRepository.swift,
 				repository/tmdb/TMDBService.swift,
 				ui/AsyncImageView.swift,
+				ui/CreditsView.swift,
 				ui/GenreListView.swift,
 				ui/GenreView.swift,
 				ui/MovieCardView.swift,
@@ -73,6 +75,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
+				model/CreditsViewModel.swift,
 				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
@@ -92,6 +95,7 @@
 				repository/tmdb/TMDBMovieRepository.swift,
 				repository/tmdb/TMDBService.swift,
 				ui/AsyncImageView.swift,
+				ui/CreditsView.swift,
 				ui/GenreListView.swift,
 				ui/GenreView.swift,
 				ui/MovieCardView.swift,

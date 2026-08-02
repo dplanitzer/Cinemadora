@@ -18,6 +18,8 @@ enum ImageUsage {
     case backdrop
     case poster
     case logo
+    case profile
+    case still
 }
 
 

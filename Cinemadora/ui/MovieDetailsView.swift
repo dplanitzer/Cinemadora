@@ -10,12 +10,14 @@ import SwiftUI
 struct MovieDetailsView: View {
     
     @State private var model: MovieViewModel
-    @State private var detailsModel: MovieDetailsViewModel
+    @State private var details: MovieDetailsViewModel
+    @State private var credits: CreditsViewModel
 
     
     init(_ model: MovieViewModel) {
         self.model = model
-        self.detailsModel = model.makeDetailsViewModel(for: model.movie)
+        self.details = model.makeDetailsViewModel()
+        self.credits = model.makeCreditsViewModel()
     }
     
     var body: some View {
@@ -33,14 +35,17 @@ struct MovieDetailsView: View {
                         .bold()
                         .padding(.bottom, 18)
                     
+                    
                     MovieGenresView(model)
                         .padding(.leading, 10.0)
                         .padding(.bottom, 14)
 
+                    
                     if let voteAvg = movie.voteAverage {
                         RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
                             .padding(.bottom, 14)
                     }
+                    
                     
                     if let releaseDate = movie.releaseDate, !releaseDate.isEmpty {
                         Text("Release Date")
@@ -53,6 +58,7 @@ struct MovieDetailsView: View {
                             .padding(.bottom, 14)
                     }
 
+                    
                     if let overview = movie.overview, !overview.isEmpty {
                         Text("Overview")
                             .font(.headline)
@@ -61,7 +67,25 @@ struct MovieDetailsView: View {
                         
                         Text(overview)
                             .font(.body)
+                            .padding(.bottom, 14)
                     }
+
+                    
+                    Text("Cast")
+                        .font(.headline)
+                        .bold()
+                        .padding(.bottom, 4)
+
+                    CreditsView(credits, .cast)
+                    
+                    
+                    Text("Crew")
+                        .font(.headline)
+                        .bold()
+                        .padding(.bottom, 4)
+
+                    CreditsView(credits, .crew)
+
                 }
             }
         }

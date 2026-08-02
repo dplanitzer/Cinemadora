@@ -14,7 +14,19 @@ nonisolated struct Credits : Decodable, Identifiable, Equatable, Hashable {
     let crew: [CrewMember]
 }
 
-nonisolated struct CastMember : Decodable, Identifiable, Equatable, Hashable {
+protocol Person : Identifiable {
+    var adult: Bool? { get }
+    var gender: Int? { get }
+    var id: Int { get }
+    var knownForDepartment: String? { get }
+    var name: String { get }
+    var originalName: String? { get }
+    var popularity: Double? { get }
+    var profilePath: String? { get }
+    var creditId: String { get }
+}
+
+nonisolated struct CastMember : Person, Decodable, Equatable, Hashable {
     
     let adult: Bool?
     let gender: Int?
@@ -24,9 +36,9 @@ nonisolated struct CastMember : Decodable, Identifiable, Equatable, Hashable {
     let originalName: String?
     let popularity: Double?
     let profilePath: String?
+    let creditId: String
     let castId: Int?
     let character: String
-    let creditId: String
     let order: Int?
     
     enum CodingKeys : String, CodingKey {
@@ -38,14 +50,14 @@ nonisolated struct CastMember : Decodable, Identifiable, Equatable, Hashable {
         case originalName = "original_name"
         case popularity
         case profilePath = "profile_path"
+        case creditId = "credit_id"
         case castId = "cast_id"
         case character
-        case creditId = "credit_id"
         case order
     }
 }
 
-nonisolated struct CrewMember : Decodable, Identifiable, Equatable, Hashable {
+nonisolated struct CrewMember : Person, Decodable, Equatable, Hashable {
     
     let adult: Bool?
     let gender: Int?

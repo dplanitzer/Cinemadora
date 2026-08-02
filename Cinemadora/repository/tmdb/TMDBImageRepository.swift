@@ -70,6 +70,12 @@ actor TMDBImageRepository : ImageRepository {
             
         case .logo:
             usageSizes = config.images.logoSizes
+            
+        case .profile:
+            usageSizes = config.images.profileSizes
+            
+        case .still:
+            usageSizes = config.images.stillSizes
         }
         
         guard usageSizes.count > 0 else { throw URLError(.badURL) }
