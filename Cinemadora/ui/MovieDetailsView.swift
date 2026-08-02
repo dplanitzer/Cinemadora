@@ -37,6 +37,7 @@ struct MovieDetailsView: View {
                     ScrollView {
                         MovieInfoView(model)
                     }
+                    .scrollIndicators(.hidden)
                     .offset(y: -30)
                     .background(.background)
                     .ignoresSafeArea(edges: .bottom)
@@ -65,16 +66,13 @@ private struct MovieInfoView: View {
     var body: some View {
         let movie = model.movie
         
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 28) {
             Text(movie.title)
                 .font(.title)
                 .bold()
-                .padding(.bottom, 18)
                     
                     
             MovieGenresView(model)
-                .padding(.leading, 10.0)
-                .padding(.bottom, 14)
 
             
             HStack(spacing: 16) {
@@ -87,57 +85,51 @@ private struct MovieInfoView: View {
                     RuntimeView(runtime)
                 }
             }
-            .padding(.bottom, 14)
 
             
             if let releaseDate = movie.releaseDate, !releaseDate.isEmpty {
-                Text("Release Date")
-                    .font(.headline)
-                    .bold()
-                    .padding(.bottom, 4)
-                        
-                Text(releaseDate)
-                    .font(.body)
-                    .padding(.bottom, 14)
+                HStack(spacing: 4) {
+                    Text("Release Date")
+                        .font(.footnote)
+                        .bold()
+                    
+                    Text(releaseDate)
+                        .font(.footnote)
+                }
             }
 
                     
             if let overview = movie.overview, !overview.isEmpty {
-                Text("Overview")
-                    .font(.headline)
-                    .bold()
-                    .padding(.bottom, 4)
-                        
                 Text(overview)
                     .font(.body)
-                    .padding(.bottom, 14)
             }
 
-                    
-            Text("Cast")
-                .font(.headline)
-                .bold()
-                .padding(.bottom, 4)
-
-            CreditsView(credits, .cast)
-                .padding(.bottom, 14)
-
-                    
-            Text("Crew")
-                .font(.headline)
-                .bold()
-                .padding(.bottom, 4)
-
-            CreditsView(credits, .crew)
-                .padding(.bottom, 14)
-
-                    
-            Text("Reviews")
-                .font(.headline)
-                .bold()
-                .padding(.bottom, 4)
-
-            ReviewListView(reviews)
+            
+            VStack(alignment: .leading) {
+                Text("Cast")
+                    .font(.headline)
+                    .bold()
+                
+                CreditsView(credits, .cast)
+            }
+            
+            
+            VStack(alignment: .leading) {
+                Text("Crew")
+                    .font(.headline)
+                    .bold()
+                
+                CreditsView(credits, .crew)
+            }
+            
+            
+            VStack(alignment: .leading) {
+                Text("Reviews")
+                    .font(.headline)
+                    .bold()
+                
+                ReviewListView(reviews)
+            }
         }
         .task {
             await details.fetchDetails()
