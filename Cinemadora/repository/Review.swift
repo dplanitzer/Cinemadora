@@ -11,11 +11,11 @@ import Foundation
 
 nonisolated struct Review : Decodable, Identifiable, Equatable, Hashable {
 
-    let author: String?
+    let author: String
     let authorDetails: AuthorDetails
     let content: String
     let createdAt: String
-    let id: Int
+    let id: String
     let updatedAt: String?
     let url: String?
     
@@ -35,7 +35,7 @@ nonisolated struct AuthorDetails : Decodable, Equatable, Hashable {
     let name: String
     let userName: String
     let avatarPath: String?
-    let rating: String?
+    let rating: Double?
     
     enum CodingKeys : String, CodingKey {
         case name

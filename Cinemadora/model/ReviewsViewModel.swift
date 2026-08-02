@@ -1,38 +1,38 @@
 //
-//  MovieListViewModel.swift
+//  ReviewsViewModel.swift
 //  Cinemadora
 //
-//  Created by Dietmar Planitzer on 7/22/26.
+//  Created by Dietmar Planitzer on 8/1/26.
 //
 
-import UIKit
+import Foundation
 
 @Observable
-final class MovieListViewModel {
+final class ReviewsViewModel {
     
-    private let listName: ListName
     private let movieRep: MovieRepository
     private let imageRep: ImageRepository
+    private let movieId: Int
     
     private var nextPage = 0
     private var pageCount = 1
 
     
-    init(_ listName: ListName, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
-        self.listName = listName
+    init(_ movieId: Int, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
+        self.movieId = movieId
         self.movieRep = movieRep
         self.imageRep = imageRep
     }
 
     private(set) var errorDescription = ""
 
-    private(set) var movieViewModels: [MovieViewModel] = []
+    private(set) var reviews: [Review] = []
     
-    func movieViewModel(for id: Int) -> MovieViewModel? {
+    func review(for id: String) -> Review? {
         
-        for mvm in movieViewModels {
-            if mvm.id == id {
-                return mvm
+        for r in reviews {
+            if r.id == id {
+                return r
             }
         }
         return nil
@@ -44,7 +44,7 @@ final class MovieListViewModel {
         return nextPage < pageCount
     }
     
-    // Fetches the next page from the movie list. Does nothing if no more data exists.
+    // Fetches the next page from reviews list. Does nothing if no more data exists.
     func fetchMore() async {
         
         guard !isLoading && hasMore else { return }
@@ -53,11 +53,9 @@ final class MovieListViewModel {
         errorDescription = ""
         
         do {
-            let r = try await movieRep.fetchMovieListPage(for: listName, nextPage)
+            let r = try await movieRep.fetchReviewsListPage(for: movieId, nextPage)
             
-            for movie in r.results {
-                movieViewModels.append(MovieViewModel(movie, movieRep, imageRep))
-            }
+            reviews.append(contentsOf: r.results)
             pageCount = r.totalPageCount
             nextPage += 1
             

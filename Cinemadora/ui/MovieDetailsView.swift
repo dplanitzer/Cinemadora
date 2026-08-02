@@ -12,12 +12,14 @@ struct MovieDetailsView: View {
     @State private var model: MovieViewModel
     @State private var details: MovieDetailsViewModel
     @State private var credits: CreditsViewModel
+    @State private var reviews: ReviewsViewModel
 
     
     init(_ model: MovieViewModel) {
         self.model = model
         self.details = model.makeDetailsViewModel()
         self.credits = model.makeCreditsViewModel()
+        self.reviews = model.makeReviewsViewModel()
     }
     
     var body: some View {
@@ -77,7 +79,8 @@ struct MovieDetailsView: View {
                         .padding(.bottom, 4)
 
                     CreditsView(credits, .cast)
-                    
+                        .padding(.bottom, 14)
+
                     
                     Text("Crew")
                         .font(.headline)
@@ -85,7 +88,15 @@ struct MovieDetailsView: View {
                         .padding(.bottom, 4)
 
                     CreditsView(credits, .crew)
+                        .padding(.bottom, 14)
 
+                    
+                    Text("Reviews")
+                        .font(.headline)
+                        .bold()
+                        .padding(.bottom, 4)
+
+                    ReviewListView(reviews)
                 }
             }
         }

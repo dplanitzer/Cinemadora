@@ -45,6 +45,7 @@
 				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
+				model/ReviewsViewModel.swift,
 				repository/Credits.swift,
 				repository/Genre.swift,
 				repository/ImageRepository.swift,
@@ -68,6 +69,8 @@
 				ui/MovieDetailsView.swift,
 				ui/MovieGenresView.swift,
 				ui/RatingView.swift,
+				ui/ReviewListView.swift,
+				ui/ReviewView.swift,
 			);
 			target = 5554A71D30117B5A001C8C5D /* CinemadoraTests */;
 		};
@@ -79,6 +82,7 @@
 				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,
 				model/MovieViewModel.swift,
+				model/ReviewsViewModel.swift,
 				repository/Credits.swift,
 				repository/Genre.swift,
 				repository/ImageRepository.swift,
@@ -102,6 +106,8 @@
 				ui/MovieDetailsView.swift,
 				ui/MovieGenresView.swift,
 				ui/RatingView.swift,
+				ui/ReviewListView.swift,
+				ui/ReviewView.swift,
 			);
 			target = 5554A72730117B5A001C8C5D /* CinemadoraUITests */;
 		};
