@@ -23,7 +23,7 @@ struct RatingView: View {
         
         let votesExtra = votesText != nil ? "(\(votesText!) votes)" : ""
         
-        HStack {
+        HStack(spacing: 4) {
             Image(systemName: "star.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)

@@ -35,7 +35,7 @@ struct MovieCardView: View {
             
             HStack {
                 if let voteAvg = movie.voteAverage {
-                    RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
+                    RatingView(voteAverage: voteAvg)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 10.0)
                 }

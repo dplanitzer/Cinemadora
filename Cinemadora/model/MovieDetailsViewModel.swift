@@ -21,10 +21,14 @@ class MovieDetailsViewModel {
     
     private(set) var details: MovieDetails?
     
-    func fetchDetails() async throws {
+    func fetchDetails() async {
         
-        if details == nil {
+        guard details == nil else { return }
+        
+        do {
             details = try await movieRep.fetchMovieDetails(for: movieId)
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }

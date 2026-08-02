@@ -48,7 +48,7 @@ final class CreditsViewModel {
             cast = uniquePeople(credits!.cast)
             crew = uniquePeople(credits!.crew)
         } catch {
-            
+            print(error.localizedDescription)
         }
     }
     

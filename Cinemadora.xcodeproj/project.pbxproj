@@ -71,6 +71,7 @@
 				ui/RatingView.swift,
 				ui/ReviewListView.swift,
 				ui/ReviewView.swift,
+				ui/RuntimeView.swift,
 			);
 			target = 5554A71D30117B5A001C8C5D /* CinemadoraTests */;
 		};
@@ -108,6 +109,7 @@
 				ui/RatingView.swift,
 				ui/ReviewListView.swift,
 				ui/ReviewView.swift,
+				ui/RuntimeView.swift,
 			);
 			target = 5554A72730117B5A001C8C5D /* CinemadoraUITests */;
 		};

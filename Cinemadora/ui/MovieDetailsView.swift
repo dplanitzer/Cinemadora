@@ -76,13 +76,20 @@ private struct MovieInfoView: View {
                 .padding(.leading, 10.0)
                 .padding(.bottom, 14)
 
-                    
-            if let voteAvg = movie.voteAverage {
-                RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
-                    .padding(.bottom, 14)
+            
+            HStack(spacing: 16) {
+                if let voteAvg = movie.voteAverage {
+                    RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
+                }
+                
+                
+                if let runtime = details.details?.runtime {
+                    RuntimeView(runtime)
+                }
             }
-                    
-                    
+            .padding(.bottom, 14)
+
+            
             if let releaseDate = movie.releaseDate, !releaseDate.isEmpty {
                 Text("Release Date")
                     .font(.headline)
@@ -131,6 +138,9 @@ private struct MovieInfoView: View {
                 .padding(.bottom, 4)
 
             ReviewListView(reviews)
+        }
+        .task {
+            await details.fetchDetails()
         }
     }
 }
