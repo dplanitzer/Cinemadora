@@ -24,17 +24,12 @@ struct ReviewView: View {
         VStack {
             HStack {
                 if let rating = rating {
-                    Image(systemName: "star.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 16)
-                        .foregroundColor(.yellow)
-                    
-                    Text("\(String(format: "%.1f", rating))")
-                        .font(.footnote)
-                    
-                    Text(author)
+                    RatingView(voteAverage: rating, showVoteMax: false)
                 }
+                
+                Text(author)
+                
+                Spacer()
             }
             
             Text(content)

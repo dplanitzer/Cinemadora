@@ -10,37 +10,48 @@ import SwiftUI
 struct RatingView: View {
     
     private let voteAverage: Double
+    private let showVoteMax: Bool
     private let voteCount: Int?
     
-    init(voteAverage: Double, voteCount: Int? = nil) {
+    init(voteAverage: Double, showVoteMax: Bool = true, voteCount: Int? = nil) {
         self.voteAverage = voteAverage
+        self.showVoteMax = showVoteMax
         self.voteCount = voteCount
     }
     
     var body: some View {
         
+        let votesExtra = votesText != nil ? "(\(votesText!) votes)" : ""
+        
         HStack {
             Image(systemName: "star.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 16)
+                .frame(width: 14)
                 .foregroundColor(.yellow)
                 
-            if let votesTxt = votesText {
-                Text("**\(ratingText)/10**  \(votesTxt) votes")
-                    .font(.footnote)
-                    .underline()
-            } else {
-                Text("**\(ratingText)/10**")
-                    .font(.footnote)
-                    .underline()
-            }
+            Text("**\(ratingText)**  \(votesExtra)")
+                .font(.footnote)
         }
     }
     
     private var ratingText: String {
         
-        return String(format: "%.1f", voteAverage)
+        let multiplied = (voteAverage * 10).rounded(.towardZero) / 10
+        let isInteger = multiplied.truncatingRemainder(dividingBy: 1) == 0
+        let voteAvgTxt: String
+        
+        if isInteger {
+            voteAvgTxt = String(Int(multiplied))
+        } else {
+            voteAvgTxt = String(format: "%.1f", multiplied)
+        }
+        
+        if showVoteMax {
+            return voteAvgTxt + "/10"
+        } else {
+            return voteAvgTxt
+        }
     }
     
     private var votesText: String? {
