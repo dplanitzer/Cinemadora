@@ -22,17 +22,20 @@ struct ReviewView: View {
     var body: some View {
         
         VStack {
-            HStack {
+            HStack(spacing: 4) {
                 if let rating = rating {
                     RatingView(voteAverage: rating, showVoteMax: false)
                 }
                 
                 Text(author)
+                    .font(.callout)
+                    .bold()
                 
                 Spacer()
             }
             
             Text(content)
+                .font(.subheadline)
         }
     }
 }
