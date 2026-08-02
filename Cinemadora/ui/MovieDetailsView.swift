@@ -9,6 +9,46 @@ import SwiftUI
 
 struct MovieDetailsView: View {
     
+    private let model: MovieViewModel
+
+    
+    init(_ model: MovieViewModel) {
+        self.model = model
+    }
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .top) {
+                AsyncImageView(model.posterImage, cornerRadius: 0.0)
+                    .frame(maxWidth: .infinity)
+                    .ignoresSafeArea(edges: [.top, .horizontal])
+                
+                VStack(spacing: 0) {
+                    Spacer()
+                        .frame(height: max(geometry.size.height * 0.40 - 30, 0))
+                    
+                    LinearGradient(
+                        colors: [.clear, .black],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 30)
+                    
+                    ScrollView {
+                        MovieInfoView(model)
+                    }
+                    .offset(y: -30)
+                    .background(.background)
+                    .ignoresSafeArea(edges: .bottom)
+                }
+            }
+        }
+    }
+}
+
+
+private struct MovieInfoView: View {
+    
     @State private var model: MovieViewModel
     @State private var details: MovieDetailsViewModel
     @State private var credits: CreditsViewModel
@@ -25,80 +65,72 @@ struct MovieDetailsView: View {
     var body: some View {
         let movie = model.movie
         
-        VStack {
-            AsyncImageView(model.posterImage, cornerRadius: 20.0)
-                .frame(maxWidth: .infinity)
-                .frame(height: 300)
-
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Text(movie.title)
-                        .font(.title)
-                        .bold()
-                        .padding(.bottom, 18)
+        VStack(alignment: .leading) {
+            Text(movie.title)
+                .font(.title)
+                .bold()
+                .padding(.bottom, 18)
                     
                     
-                    MovieGenresView(model)
-                        .padding(.leading, 10.0)
-                        .padding(.bottom, 14)
+            MovieGenresView(model)
+                .padding(.leading, 10.0)
+                .padding(.bottom, 14)
 
                     
-                    if let voteAvg = movie.voteAverage {
-                        RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
-                            .padding(.bottom, 14)
-                    }
-                    
-                    
-                    if let releaseDate = movie.releaseDate, !releaseDate.isEmpty {
-                        Text("Release Date")
-                            .font(.headline)
-                            .bold()
-                            .padding(.bottom, 4)
-                        
-                        Text(releaseDate)
-                            .font(.body)
-                            .padding(.bottom, 14)
-                    }
-
-                    
-                    if let overview = movie.overview, !overview.isEmpty {
-                        Text("Overview")
-                            .font(.headline)
-                            .bold()
-                            .padding(.bottom, 4)
-                        
-                        Text(overview)
-                            .font(.body)
-                            .padding(.bottom, 14)
-                    }
-
-                    
-                    Text("Cast")
-                        .font(.headline)
-                        .bold()
-                        .padding(.bottom, 4)
-
-                    CreditsView(credits, .cast)
-                        .padding(.bottom, 14)
-
-                    
-                    Text("Crew")
-                        .font(.headline)
-                        .bold()
-                        .padding(.bottom, 4)
-
-                    CreditsView(credits, .crew)
-                        .padding(.bottom, 14)
-
-                    
-                    Text("Reviews")
-                        .font(.headline)
-                        .bold()
-                        .padding(.bottom, 4)
-
-                    ReviewListView(reviews)
-                }
+            if let voteAvg = movie.voteAverage {
+                RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
+                    .padding(.bottom, 14)
             }
+                    
+                    
+            if let releaseDate = movie.releaseDate, !releaseDate.isEmpty {
+                Text("Release Date")
+                    .font(.headline)
+                    .bold()
+                    .padding(.bottom, 4)
+                        
+                Text(releaseDate)
+                    .font(.body)
+                    .padding(.bottom, 14)
+            }
+
+                    
+            if let overview = movie.overview, !overview.isEmpty {
+                Text("Overview")
+                    .font(.headline)
+                    .bold()
+                    .padding(.bottom, 4)
+                        
+                Text(overview)
+                    .font(.body)
+                    .padding(.bottom, 14)
+            }
+
+                    
+            Text("Cast")
+                .font(.headline)
+                .bold()
+                .padding(.bottom, 4)
+
+            CreditsView(credits, .cast)
+                .padding(.bottom, 14)
+
+                    
+            Text("Crew")
+                .font(.headline)
+                .bold()
+                .padding(.bottom, 4)
+
+            CreditsView(credits, .crew)
+                .padding(.bottom, 14)
+
+                    
+            Text("Reviews")
+                .font(.headline)
+                .bold()
+                .padding(.bottom, 4)
+
+            ReviewListView(reviews)
         }
     }
 }
