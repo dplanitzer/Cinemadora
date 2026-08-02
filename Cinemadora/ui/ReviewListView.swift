@@ -68,7 +68,9 @@ struct ReviewListView: View {
                 }
             }
             .padding(.horizontal)
+            .scrollTargetLayout()
         }
+        .scrollTargetBehavior(.viewAligned)
     }
 }
 

@@ -54,7 +54,9 @@ struct CreditsView: View {
                 }
             }
             .padding(.horizontal)
+            .scrollTargetLayout()
         }
+        .scrollTargetBehavior(.viewAligned)
     }
     
     var persons: [any Person] {
