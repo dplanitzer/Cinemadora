@@ -72,10 +72,10 @@ final class TMDBImageRepository : ImageRepository {
         
         switch size {
         case .small:
-            sizeClassIndex = min(1, usageSizes.count - 1)
+            sizeClassIndex = 0
             
         case .middle:
-            sizeClassIndex = usageSizes.count / 2
+            sizeClassIndex = max(usageSizes.count - 1, 0) / 2
             
         case .large:
             sizeClassIndex = max(usageSizes.count - 2, 0)

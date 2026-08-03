@@ -19,13 +19,15 @@ enum ImageState : Equatable {
 struct AsyncImageView: View {
     
     private let locator: ImageLocator
+    private let sizeClass: ImageSizeClass
     private let cornerRadius: CGFloat
     
     @State var state: ImageState = .idle
 
     
-    init(_ locator: ImageLocator, cornerRadius: CGFloat = 0.0) {
+    init(_ locator: ImageLocator, size: ImageSizeClass = .large, cornerRadius: CGFloat = 0.0) {
         self.locator = locator
+        self.sizeClass = size
         self.cornerRadius = cornerRadius
     }
     
@@ -66,7 +68,7 @@ struct AsyncImageView: View {
             state = .loading
             
             do {
-                state = .loaded(image: try await locator.imageRepository.image(for: path, usage: locator.usage, size: .large))
+                state = .loaded(image: try await locator.imageRepository.image(for: path, usage: locator.usage, size: sizeClass))
             } catch {
                 state = .failed(error: error.localizedDescription)
             }

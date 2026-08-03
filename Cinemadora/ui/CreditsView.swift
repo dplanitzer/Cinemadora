@@ -49,8 +49,8 @@ struct CreditsView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
                 ForEach(persons, id: \.id) { person in
-                    AsyncImageView(model.image(for: person), cornerRadius: 10.0)
-                        .frame(width: 73.3, height: 110)
+                    AsyncImageView(model.image(for: person), size: .middle, cornerRadius: 10.0)
+                        .frame(width: 73, height: 110)
                 }
             }
             .padding(.horizontal)
