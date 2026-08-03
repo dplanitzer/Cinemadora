@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-enum ImageSizeClass {
+nonisolated enum ImageSizeClass {
     case small
     case middle
     case large
     case original
 }
 
-enum ImageUsage {
+nonisolated enum ImageUsage {
     case backdrop
     case poster
     case logo
