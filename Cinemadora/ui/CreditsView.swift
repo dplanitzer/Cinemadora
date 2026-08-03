@@ -47,7 +47,7 @@ struct CreditsView: View {
     private func showCredits() -> some View {
         
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
+            LazyHStack(spacing: 16) {
                 ForEach(persons, id: \.id) { person in
                     AsyncImageView(model.image(for: person), size: .middle, cornerRadius: 10.0)
                         .frame(width: 73, height: 110)
