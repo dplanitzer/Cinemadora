@@ -1,6 +1,8 @@
 # Cinemadora
 Cinemadora is an easy to use movie information app for iOS. It uses the TMDB movie database REST API to get information about popular movies and TV shows. The purpose of this project is to show how to leverage the latest development tools &amp; techniques to successfully create a modern iOS app.
 
+<video src="https://github.com/user-attachments/assets/4e114189-2df2-47e3-a155-dc6ac2cd8d13" width="480" controls></video>
+
 The code showcases how to use the following techniques &amp; technologies:
 * Swift UI
 * Swift actors, async and await to implement data race-free concurrency
