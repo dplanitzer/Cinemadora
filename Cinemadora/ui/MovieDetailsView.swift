@@ -10,10 +10,12 @@ import SwiftUI
 struct MovieDetailsView: View {
     
     private let model: MovieViewModel
+    var namespace: Namespace.ID
 
     
-    init(_ model: MovieViewModel) {
+    init(_ model: MovieViewModel, _ namespace: Namespace.ID) {
         self.model = model
+        self.namespace = namespace
     }
     
     var body: some View {
@@ -43,6 +45,7 @@ struct MovieDetailsView: View {
                     .ignoresSafeArea(edges: .bottom)
                 }
             }
+            .navigationTransition(.zoom(sourceID: model.id, in: namespace))
         }
     }
 }
@@ -138,13 +141,28 @@ private struct MovieInfoView: View {
 }
 
 
+private struct PreviewWrapper: View {
+    
+    private let model: MovieViewModel
+    @Namespace private var previewNamespace
+    
+    init(_ model: MovieViewModel) {
+        self.model = model
+    }
+    
+    var body: some View {
+        MovieDetailsView(model, previewNamespace)
+    }
+}
+
+
 #Preview {
     @State @Previewable var movieState: Movie? = nil
     let movieRep = MockMovieRepository()
 
     Group {
         if let movie = movieState {
-            MovieDetailsView(MovieViewModel(movie, movieRep, MockImageRepository()))
+            PreviewWrapper(MovieViewModel(movie, movieRep, MockImageRepository()))
         } else {
             ProgressView()
         }

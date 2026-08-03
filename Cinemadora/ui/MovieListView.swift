@@ -10,7 +10,8 @@ import SwiftUI
 struct MovieListView: View {
     
     @State private var model: MovieListViewModel
-
+    @Namespace private var movieNamespace
+    
     
     init(_ model: MovieListViewModel) {
         self.model = model
@@ -71,7 +72,9 @@ struct MovieListView: View {
                                         }
                                     }
                                 }
+                                .matchedTransitionSource(id: movieViewModel.id, in: movieNamespace)
                         }
+                        .buttonStyle(.plain)
                         
                         if model.isLoading {
                             ProgressView()
@@ -82,7 +85,7 @@ struct MovieListView: View {
                 }
                 .scrollTargetLayout()
                 .navigationDestination(for: Int.self) { id in
-                    MovieDetailsView(model.movieViewModel(for: id)!)
+                    MovieDetailsView(model.movieViewModel(for: id)!, movieNamespace)
                 }
             }
             .scrollTargetBehavior(.viewAligned)
