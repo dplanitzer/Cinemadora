@@ -134,6 +134,7 @@ private struct MovieInfoView: View {
                 ReviewListView(reviews)
             }
         }
+        .padding(.horizontal, 10)
         .task {
             await details.fetchDetails()
         }
