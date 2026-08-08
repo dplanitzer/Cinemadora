@@ -133,6 +133,32 @@ private struct MovieInfoView: View {
                 
                 ReviewListView(reviews)
             }
+            
+            
+            if details.details?.budget != nil || details.details?.revenue != nil {
+                HStack(spacing: 16) {
+                    if let budget = details.details?.budget {
+                        HStack(spacing: 4) {
+                            Text("Budget")
+                                .font(.footnote)
+                                .bold()
+                            
+                            CurrencyView(budget)
+                        }
+                    }
+                    
+                    
+                    if let revenue = details.details?.revenue {
+                        HStack(spacing: 4) {
+                            Text("Revenue")
+                                .font(.footnote)
+                                .bold()
+                            
+                            CurrencyView(revenue)
+                        }
+                    }
+                }
+            }
         }
         .padding(.horizontal, 10)
         .task {
