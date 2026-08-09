@@ -134,6 +134,27 @@ private struct MovieInfoView: View {
                 ReviewListView(reviews)
             }
             
+
+            if let companies = details.details?.productionCompanies, !companies.isEmpty {
+                VStack(alignment: .leading) {
+                    Text("Studios")
+                        .font(.headline)
+                        .bold()
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(spacing: 16) {
+                            ForEach(companies, id: \.id) { company in
+                                AsyncImageView(details.image(for: company), size: .middle)
+                                    .frame(width: 134, height: 38)
+                            }
+                        }
+                        .padding(.horizontal)
+                        .scrollTargetLayout()
+                    }
+                    .scrollTargetBehavior(.viewAligned)
+                }
+            }
+
             
             if details.details?.budget != nil || details.details?.revenue != nil {
                 HStack(spacing: 16) {

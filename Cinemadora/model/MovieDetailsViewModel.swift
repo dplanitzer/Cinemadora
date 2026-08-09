@@ -8,15 +8,17 @@
 import UIKit
 
 @Observable
-class MovieDetailsViewModel {
+final class MovieDetailsViewModel {
         
     private let movieRep: MovieRepository
+    private let imageRep: ImageRepository
     private let movieId: Int
     
     
-    init(_ movieId: Int, _ movieRep: MovieRepository) {
+    init(_ movieId: Int, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
         self.movieId = movieId
         self.movieRep = movieRep
+        self.imageRep = imageRep
     }
     
     private(set) var details: MovieDetails?
@@ -30,5 +32,10 @@ class MovieDetailsViewModel {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    func image(for company: CompanySummary) -> ImageLocator {
+        
+        return ImageLocator(imageRep, company.logoPath, .logo)
     }
 }

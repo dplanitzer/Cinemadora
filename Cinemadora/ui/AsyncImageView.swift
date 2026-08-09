@@ -46,13 +46,14 @@ struct AsyncImageView: View {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
+                    .background(Color(white: 1.0))
                     .clipShape(.rect(cornerRadius: cornerRadius))
                 
             case .fallback:
-                Color.black
+                Color(white: 0.2)
 
             case .failed:
-                Color.gray.opacity(0.3)
+                Color(white: 0.2)
             }
         }
         .task {
@@ -80,6 +81,11 @@ struct AsyncImageView: View {
 
 
 #Preview {
-    AsyncImageView(ImageLocator(MockImageRepository(), "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg", .poster))
+    Text("Success")
+    AsyncImageView(ImageLocator(MockImageRepository(), "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg", .poster), cornerRadius: 16.0)
+        .preferredColorScheme(.dark)
+    
+    Text("Failure")
+    AsyncImageView(ImageLocator(MockImageRepository(), "/not_valid_url", .poster), cornerRadius: 16.0)
         .preferredColorScheme(.dark)
 }

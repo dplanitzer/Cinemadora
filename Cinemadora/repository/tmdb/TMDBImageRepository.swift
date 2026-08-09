@@ -41,7 +41,6 @@ final class TMDBImageRepository : ImageRepository {
             throw URLError(.cannotDecodeContentData)
         }
         
-        
         await imageCache.insert(image, for: key)
         return image
     }
@@ -75,7 +74,7 @@ final class TMDBImageRepository : ImageRepository {
             sizeClassIndex = 0
             
         case .middle:
-            sizeClassIndex = max(usageSizes.count - 1, 0) / 2
+            sizeClassIndex = max(usageSizes.count - 2, 0) / 2
             
         case .large:
             sizeClassIndex = max(usageSizes.count - 2, 0)
