@@ -25,5 +25,9 @@ protocol MovieRepository {
 
     func fetchCredits(for movieId: Int) async throws -> Credits
     
+    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails
+    
+    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails
+
     func genre(for id: Int) async throws -> String?
 }

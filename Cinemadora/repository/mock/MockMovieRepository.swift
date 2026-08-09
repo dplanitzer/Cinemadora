@@ -36,7 +36,17 @@ actor MockMovieRepository : MovieRepository {
         
         return try await fetch(from: "credits", type: Credits.self)
     }
-    
+
+    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails {
+
+        return try await fetch(from: "tom_hanks", type: PersonDetails.self)
+    }
+
+    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails {
+
+        return try await fetch(from: "lucasfilm", type: CompanyDetails.self)
+    }
+
     func genre(for id: Int) async throws -> String? {
 
         if genres.isEmpty {

@@ -49,7 +49,17 @@ actor TMDBMovieRepository : MovieRepository {
         
         return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/credits?language=\(languageRegion)", type: Credits.self)
     }
-    
+
+    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails {
+        
+        return try await service.fetch(from: "https://api.themoviedb.org/3/person/\(personId)?language=\(languageRegion)", type: PersonDetails.self)
+    }
+
+    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails {
+        
+        return try await service.fetch(from: "https://api.themoviedb.org/3/company/\(companyId)", type: CompanyDetails.self)
+    }
+
     func genre(for id: Int) async throws -> String? {
 
         if genres.isEmpty {
