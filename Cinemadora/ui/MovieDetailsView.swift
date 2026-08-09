@@ -146,6 +146,9 @@ private struct MovieInfoView: View {
                             ForEach(companies, id: \.id) { company in
                                 AsyncImageView(details.image(for: company), size: .middle)
                                     .frame(width: 134, height: 38)
+                                    .background(Color(white: 1.0))
+                                    .padding(4)
+                                    .border(.white, width: 4)
                             }
                         }
                         .padding(.horizontal)

@@ -46,7 +46,6 @@ struct AsyncImageView: View {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
-                    .background(Color(white: 1.0))
                     .clipShape(.rect(cornerRadius: cornerRadius))
                 
             case .fallback:
