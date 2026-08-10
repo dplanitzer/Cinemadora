@@ -48,10 +48,11 @@ struct ReviewListView: View {
     private func showReviewList() -> some View {
         
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 16) {
+            LazyHStack(spacing: 0) {
                 ForEach(model.reviews) { review in
                     ReviewView(rating: review.authorDetails.rating, author: review.author, content: review.content)
-                        .frame(width: 200, height: 120)
+                        .containerRelativeFrame(.horizontal)
+                        .frame(height: 120)
                         .onAppear {
                             if review.id == model.reviews.last?.id {
                                 Task {
@@ -59,18 +60,17 @@ struct ReviewListView: View {
                                 }
                             }
                         }
-
-                    if model.isLoading {
-                        ProgressView()
-                            .frame(width: 100, height: 120)
-                            .padding()
-                    }
+                }
+                
+                if model.isLoading {
+                    ProgressView()
+                        .containerRelativeFrame(.horizontal)
+                        .frame(height: 120)
                 }
             }
-            .padding(.horizontal)
             .scrollTargetLayout()
         }
-        .scrollTargetBehavior(.viewAligned)
+        .scrollTargetBehavior(.paging)
     }
 }
 
