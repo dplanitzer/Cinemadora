@@ -18,7 +18,7 @@ struct CinemadoraApp: App {
             let imageRep = TMDBImageRepository(service)
             let popularMoviesModel = MovieListViewModel(.popular, movieRep, imageRep)
             
-            MovieListView(popularMoviesModel)
+            MovieListScreen(popularMoviesModel)
                 .preferredColorScheme(.dark)
         }
     }

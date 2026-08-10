@@ -1,5 +1,5 @@
 //
-//  MovieListView.swift
+//  MovieListScreen.swift
 //  Cinemadora
 //
 //  Created by Dietmar Planitzer on 7/22/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MovieListView: View {
+struct MovieListScreen: View {
     
     @State private var model: MovieListViewModel
     @Namespace private var movieNamespace
@@ -87,7 +87,7 @@ struct MovieListView: View {
                 }
                 .scrollTargetLayout()
                 .navigationDestination(for: Int.self) { id in
-                    MovieDetailsView(model.movieViewModel(for: id)!, movieNamespace)
+                    MovieDetailsScreen(model.movieViewModel(for: id)!, movieNamespace)
                 }
             }
             .scrollTargetBehavior(.viewAligned)
@@ -106,6 +106,6 @@ struct MovieListView: View {
 
 
 #Preview {
-    MovieListView(MovieListViewModel(.popular, MockMovieRepository(), MockImageRepository()))
+    MovieListScreen(MovieListViewModel(.popular, MockMovieRepository(), MockImageRepository()))
         .preferredColorScheme(.dark)
 }

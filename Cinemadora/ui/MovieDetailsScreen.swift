@@ -1,5 +1,5 @@
 //
-//  MovieDetailsView.swift
+//  MovieDetailsScreen.swift
 //  Cinemadora
 //
 //  Created by Dietmar Planitzer on 7/23/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MovieDetailsView: View {
+struct MovieDetailsScreen: View {
     
     private let model: MovieViewModel
     var namespace: Namespace.ID
@@ -201,7 +201,7 @@ private struct PreviewWrapper: View {
     }
     
     var body: some View {
-        MovieDetailsView(model, previewNamespace)
+        MovieDetailsScreen(model, previewNamespace)
     }
 }
 
