@@ -59,7 +59,7 @@ struct MovieListScreen: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 16) {
                     ForEach(model.movieViewModels) { movieViewModel in
-                        NavigationLink(value: movieViewModel.id) {
+                        NavigationLink(value: MovieDetailsTarget(id: movieViewModel.id)) {
                             MovieCardView(movieViewModel)
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                                 .scrollTransition(.interactive, axis: .horizontal) { content, phase in
@@ -86,9 +86,6 @@ struct MovieListScreen: View {
                     }
                 }
                 .scrollTargetLayout()
-                .navigationDestination(for: Int.self) { id in
-                    MovieDetailsScreen(model.movieViewModel(for: id)!, movieNamespace)
-                }
             }
             .scrollTargetBehavior(.viewAligned)
             
@@ -100,6 +97,9 @@ struct MovieListScreen: View {
                         .frame(width: idx == 1 ? 10 : 7, height: idx == 1 ? 10 : 7)
                 }
             }
+        }
+        .navigationDestination(for: MovieDetailsTarget.self) { target in
+            MovieDetailsScreen(model.movieViewModel(for: target.id)!, movieNamespace)
         }
     }
 }

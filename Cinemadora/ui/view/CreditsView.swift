@@ -13,11 +13,13 @@ enum CreditsType {
 }
 
 
-struct CreditsView: View {
+struct CreditsView<Target: NavigationTarget>: View {
     
     private let PROFILE_WIDTH = 72.0
     private let PROFILE_HEIGHT = 110.0
     
+    @Namespace private var profileNamespace
+
     @State private var model: CreditsViewModel
     private let creditsType: CreditsType
     
@@ -54,36 +56,19 @@ struct CreditsView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
                 ForEach(persons, id: \.id) { person in
-                    AsyncImageView(model.image(for: person), size: .middle) { state in
-                        switch state {
-                        case .loaded(let image):
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                            
-                        case .failed, .fallback:
-                            ZStack {
-                                Color(white: 0.22)
-                                
-                                Circle()
-                                    .stroke(Color(white: 0.75), lineWidth: 2)
-                                    .frame(width: 50, height: 50)
-                                    .overlay {
-                                        Text(getInitials(person.name))
-                                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                                            .foregroundColor(.white)
-                                    }
-                            }
-                            
-                        default:
-                            Color(white: 0.22)
-                        }
+                    NavigationLink(value: Target(id: person.id)) {
+                        ProfileView(person, model.image(for:))
+                            .frame(width: PROFILE_WIDTH, height: PROFILE_HEIGHT)
+                            .clipShape(.rect(cornerRadius: 10.0))
+                            .matchedTransitionSource(id: person.id, in: profileNamespace)
                     }
-                    .frame(width: PROFILE_WIDTH, height: PROFILE_HEIGHT)
-                    .clipShape(.rect(cornerRadius: 10.0))
+                    .buttonStyle(.plain)
                 }
             }
             .scrollTargetLayout()
+            .navigationDestination(for: Target.self) { target in
+                PersonDetailsScreen(model.makePersonDetailsViewModel(for: target.id), profileNamespace)
+            }
         }
         .scrollTargetBehavior(.viewAligned)
     }
@@ -97,8 +82,50 @@ struct CreditsView: View {
             return model.crew
         }
     }
+}
+
+
+private struct ProfileView: View {
     
-    func getInitials(_ fullName: String) -> String {
+    private var person: any Person
+    private let imageResolver: (any Person) -> ImageLocator
+    
+    
+    init(_ person: any Person, _ imageResolver: @escaping (any Person) -> ImageLocator) {
+        self.person = person
+        self.imageResolver = imageResolver
+    }
+    
+    var body: some View {
+        
+        AsyncImageView(imageResolver(person), size: .middle) { state in
+            switch state {
+            case .loaded(let image):
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                            
+            case .failed, .fallback:
+                ZStack {
+                    Color(white: 0.22)
+                                
+                    Circle()
+                        .stroke(Color(white: 0.75), lineWidth: 2)
+                        .frame(width: 50, height: 50)
+                        .overlay {
+                            Text(getInitials(person.name))
+                                .font(.system(size: 16, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                }
+                            
+            default:
+                Color(white: 0.22)
+            }
+        }
+    }
+    
+    private func getInitials(_ fullName: String) -> String {
         let components = fullName.split(separator: " ").map { $0 }
         
         guard let firstComponent = components.first,
@@ -122,6 +149,6 @@ struct CreditsView: View {
 
 
 #Preview {
-    CreditsView(CreditsViewModel(550, MockMovieRepository(), MockImageRepository()), .cast)
+    CreditsView<CastMemberDetailsTarget>(CreditsViewModel(550, MockMovieRepository(), MockImageRepository()), .cast)
         .preferredColorScheme(.dark)
 }

@@ -31,6 +31,11 @@ final class CreditsViewModel {
     
     private(set) var crew: [CrewMember] = []
 
+    func makePersonDetailsViewModel(for personId: Int) -> PersonDetailsViewModel {
+        
+        return PersonDetailsViewModel(personId, movieRep, imageRep)
+    }
+
     func image(for member: any Person) -> ImageLocator {
         
         return ImageLocator(imageRep, member.profilePath, .profile)

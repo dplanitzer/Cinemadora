@@ -125,7 +125,7 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                CreditsView(credits, .cast)
+                CreditsView<CastMemberDetailsTarget>(credits, .cast)
             }
             
             
@@ -134,7 +134,7 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                CreditsView(credits, .crew)
+                CreditsView<CrewMemberDetailsTarget>(credits, .crew)
             }
             
             

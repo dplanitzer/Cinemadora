@@ -5,7 +5,7 @@
 //  Created by Dietmar Planitzer on 7/22/26.
 //
 
-import UIKit
+import Foundation
 
 @Observable
 final class MovieListViewModel {
