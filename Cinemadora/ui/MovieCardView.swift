@@ -48,7 +48,37 @@ struct MovieCardView: View {
             .padding(.horizontal, 10.0)
             
             
-            AsyncImageView(model.posterImage, cornerRadius: 60.0)
+            AsyncImageView(model.posterImage) { state in
+                switch state {
+                case .loading:
+                    Color(white: 0.22)
+                        .overlay {
+                            ProgressView()
+                                .tint(.white)
+                        }
+                    
+                case .loaded(let image):
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+
+                case .failed:
+                    ZStack {
+                        Color(white: 0.22)
+                        Image(systemName: "photo.badge.exclamationmark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 62, height: 62)
+                            .foregroundColor(.white)
+                    }
+
+                default:
+                    Color(white: 0.22)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .aspectRatio(0.66, contentMode: .fit)
+            .clipShape(.rect(cornerRadius: 60.0))
         }
         .foregroundColor(.primary)
     }

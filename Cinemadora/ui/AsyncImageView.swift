@@ -16,48 +16,26 @@ enum ImageState : Equatable {
 }
 
 
-struct AsyncImageView: View {
+struct AsyncImageView<Content: View>: View {
     
     private let locator: ImageLocator
     private let sizeClass: ImageSizeClass
-    private let cornerRadius: CGFloat
-    
-    @State var state: ImageState = .idle
+    private let content: (ImageState) -> Content
+    @State private var state: ImageState = .idle
 
     
-    init(_ locator: ImageLocator, size: ImageSizeClass = .large, cornerRadius: CGFloat = 0.0) {
+    init(_ locator: ImageLocator, size: ImageSizeClass = .large, @ViewBuilder _ content: @escaping (ImageState) -> Content) {
         self.locator = locator
         self.sizeClass = size
-        self.cornerRadius = cornerRadius
+        self.content = content
     }
     
     var body: some View {
         
-        Group {
-            switch state {
-            case .idle:
-                Color.gray.opacity(0.2)
-                
-            case .loading:
-                ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-            case .loaded(let image):
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(.rect(cornerRadius: cornerRadius))
-                
-            case .fallback:
-                Color(white: 0.2)
-
-            case .failed:
-                Color(white: 0.2)
+        content(state)
+            .task {
+                await fetchImage()
             }
-        }
-        .task {
-            await fetchImage()
-        }
     }
     
     private func fetchImage() async {
@@ -79,12 +57,48 @@ struct AsyncImageView: View {
 }
 
 
-#Preview {
-    Text("Success")
-    AsyncImageView(ImageLocator(MockImageRepository(), "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg", .poster), cornerRadius: 16.0)
-        .preferredColorScheme(.dark)
+@ViewBuilder
+private func sharedContent(state: ImageState) -> some View {
+    switch state {
+    case .loading:
+        Color(white: 0.22)
+            .overlay {
+                ProgressView()
+                    .tint(.white)
+            }
+
+    case .loaded(let image):
+        Image(uiImage: image)
+            .resizable()
+            .scaledToFit()
+                    
+    case .failed:
+        ZStack {
+            Color(white: 0.22)
+            Image(systemName: "photo.badge.exclamationmark")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 62, height: 62)
+                .foregroundColor(.white)
+        }
     
-    Text("Failure")
-    AsyncImageView(ImageLocator(MockImageRepository(), "/not_valid_url", .poster), cornerRadius: 16.0)
+    default:
+        Color(white: 0.22)
+    }
+}
+
+#Preview("Success") {
+    AsyncImageView(ImageLocator(MockImageRepository(), "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg", .poster), sharedContent)
         .preferredColorScheme(.dark)
+        .frame(maxWidth: .infinity)
+        .aspectRatio(0.66, contentMode: .fit)
+        .clipShape(.rect(cornerRadius: 60.0))
+}
+
+#Preview("Failure") {
+    AsyncImageView(ImageLocator(MockImageRepository(), "/not_valid_url", .poster), sharedContent)
+        .preferredColorScheme(.dark)
+        .frame(maxWidth: .infinity)
+        .aspectRatio(0.66, contentMode: .fit)
+        .clipShape(.rect(cornerRadius: 60.0))
 }

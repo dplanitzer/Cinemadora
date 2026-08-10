@@ -21,9 +21,21 @@ struct MovieDetailsView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
-                AsyncImageView(model.posterImage, cornerRadius: 0.0)
-                    .frame(maxWidth: .infinity)
-                    .ignoresSafeArea(edges: [.top, .horizontal])
+                AsyncImageView(model.posterImage) { state in
+                    switch state {
+                    case .loaded(let image):
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                                    
+                    default:
+                        Color(white: 0.22)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .aspectRatio(0.66, contentMode: .fit)
+                .clipShape(.rect(cornerRadius: 60.0))
+                .ignoresSafeArea(edges: [.top, .horizontal])
                 
                 VStack(spacing: 0) {
                     Spacer()
@@ -137,18 +149,28 @@ private struct MovieInfoView: View {
 
             if let companies = details.details?.productionCompanies, !companies.isEmpty {
                 VStack(alignment: .leading) {
-                    Text("Studios")
+                    Text("Studio")
                         .font(.headline)
                         .bold()
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 16) {
                             ForEach(companies, id: \.id) { company in
-                                AsyncImageView(details.image(for: company), size: .middle)
-                                    .frame(width: 134, height: 38)
-                                    .background(Color(white: 1.0))
-                                    .padding(4)
-                                    .border(.white, width: 4)
+                                AsyncImageView(details.image(for: company), size: .middle) { state in
+                                    switch state {
+                                    case .loaded(let image):
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .scaledToFit()
+                                                    
+                                    default:
+                                        Color(white: 0.22)
+                                    }
+                                }
+                                .frame(width: 134, height: 38)
+                                .background(Color(white: 1.0))
+                                .padding(4)
+                                .border(.white, width: 4)
                             }
                         }
                         .padding(.horizontal)
