@@ -44,9 +44,11 @@ struct MovieListView: View {
         else if !model.errorDescription.isEmpty {
             Text("Error: \(model.errorDescription)")
                 .foregroundStyle(.red)
+                .multilineTextAlignment(.center)
         }
         else if !model.hasMore {
             Text("No movies")
+                .multilineTextAlignment(.center)
         }
     }
     

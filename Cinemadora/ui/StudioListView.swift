@@ -9,6 +9,9 @@ import SwiftUI
 
 struct StudioListView: View {
     
+    private let LOGO_WIDTH = 134.0
+    private let LOGO_HEIGHT = 38.0
+    
     private var studios: [CompanySummary]
     private let imageResolver: (CompanySummary) -> ImageLocator
 
@@ -43,13 +46,12 @@ struct StudioListView: View {
                             Color.white
                         }
                     }
-                    .frame(width: 134, height: 38)
+                    .frame(width: LOGO_WIDTH, height: LOGO_HEIGHT)
                     .background(Color.white)
                     .padding(4)
                     .border(.white, width: 4)
                 }
             }
-            .padding(.horizontal)
             .scrollTargetLayout()
         }
         .scrollTargetBehavior(.viewAligned)

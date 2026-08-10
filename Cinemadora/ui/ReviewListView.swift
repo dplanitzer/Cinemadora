@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ReviewListView: View {
     
+    private let REVIEW_HEIGHT = 120.0
+    
     @State private var model: ReviewsViewModel
 
     
@@ -34,13 +36,21 @@ struct ReviewListView: View {
 
         if model.isLoading {
             ProgressView()
+                .frame(maxWidth: .infinity)
+                .frame(height: REVIEW_HEIGHT)
         }
         else if !model.errorDescription.isEmpty {
             Text("Error: \(model.errorDescription)")
+                .frame(maxWidth: .infinity)
+                .frame(height: REVIEW_HEIGHT)
                 .foregroundStyle(.red)
+                .multilineTextAlignment(.center)
         }
         else if !model.hasMore {
             Text("No reviews")
+                .frame(maxWidth: .infinity)
+                .frame(height: REVIEW_HEIGHT)
+                .multilineTextAlignment(.center)
         }
     }
     
@@ -52,7 +62,7 @@ struct ReviewListView: View {
                 ForEach(model.reviews) { review in
                     ReviewView(rating: review.authorDetails.rating, author: review.author, content: review.content)
                         .containerRelativeFrame(.horizontal)
-                        .frame(height: 120)
+                        .frame(height: REVIEW_HEIGHT)
                         .onAppear {
                             if review.id == model.reviews.last?.id {
                                 Task {
@@ -65,7 +75,7 @@ struct ReviewListView: View {
                 if model.isLoading {
                     ProgressView()
                         .containerRelativeFrame(.horizontal)
-                        .frame(height: 120)
+                        .frame(height: REVIEW_HEIGHT)
                 }
             }
             .scrollTargetLayout()

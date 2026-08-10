@@ -15,6 +15,9 @@ enum CreditsType {
 
 struct CreditsView: View {
     
+    private let PROFILE_WIDTH = 72.0
+    private let PROFILE_HEIGHT = 110.0
+    
     @State private var model: CreditsViewModel
     private let creditsType: CreditsType
     
@@ -41,6 +44,8 @@ struct CreditsView: View {
     private func showPlaceholder() -> some View {
         
         ProgressView()
+            .frame(maxWidth: .infinity)
+            .frame(height: PROFILE_HEIGHT)
     }
     
     @ViewBuilder
@@ -74,11 +79,10 @@ struct CreditsView: View {
                             Color(white: 0.22)
                         }
                     }
-                    .frame(width: 72, height: 110)
+                    .frame(width: PROFILE_WIDTH, height: PROFILE_HEIGHT)
                     .clipShape(.rect(cornerRadius: 10.0))
                 }
             }
-            .padding(.horizontal)
             .scrollTargetLayout()
         }
         .scrollTargetBehavior(.viewAligned)
