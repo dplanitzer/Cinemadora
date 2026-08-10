@@ -12,10 +12,12 @@ struct ReviewListView: View {
     private let REVIEW_HEIGHT = 120.0
     
     @State private var model: ReviewsViewModel
-
+    private let onTapReview: (Review) -> Void
     
-    init(_ model: ReviewsViewModel) {
+    
+    init(_ model: ReviewsViewModel, _ onTapReview: @escaping (Review) -> Void) {
         self.model = model
+        self.onTapReview = onTapReview
     }
     
     var body: some View {
@@ -60,7 +62,10 @@ struct ReviewListView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 0) {
                 ForEach(model.reviews) { review in
-                    ReviewView(rating: review.authorDetails.rating, author: review.author, content: review.content)
+                        
+                    ReviewView(review) {
+                            self.onTapReview(review)
+                        }
                         .containerRelativeFrame(.horizontal)
                         .frame(height: REVIEW_HEIGHT)
                         .onAppear {
@@ -71,7 +76,7 @@ struct ReviewListView: View {
                             }
                         }
                 }
-                
+                    
                 if model.isLoading {
                     ProgressView()
                         .containerRelativeFrame(.horizontal)
@@ -84,8 +89,9 @@ struct ReviewListView: View {
     }
 }
 
-
+/*
 #Preview {
     ReviewListView(ReviewsViewModel(550, MockMovieRepository(), MockImageRepository()))
         .preferredColorScheme(.dark)
 }
+*/

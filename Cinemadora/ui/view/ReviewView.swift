@@ -9,39 +9,54 @@ import SwiftUI
 
 struct ReviewView: View {
     
-    private let rating: Double?
-    private let author: String
-    private let content: String
+    private let review: Review
+    private let onTap: () -> Void
     
-    init(rating: Double?, author: String, content: String) {
-        self.rating = rating
-        self.author = author
-        self.content = content
+    
+    init(_ review: Review, _ onTap: @escaping () -> Void = {}) {
+        self.review = review
+        self.onTap = onTap
     }
     
     var body: some View {
         
-        VStack {
-            HStack(spacing: 4) {
-                if let rating = rating {
-                    RatingView(voteAverage: rating, showVoteMax: false)
+        ZStack {
+            VStack {
+                HStack(spacing: 4) {
+                    if let rating = review.authorDetails.rating {
+                        RatingView(voteAverage: rating, showVoteMax: false)
+                    }
+                    
+                    Text(review.author)
+                        .font(.callout)
+                        .bold()
+                    
+                    Spacer()
                 }
                 
-                Text(author)
-                    .font(.callout)
-                    .bold()
-                
-                Spacer()
+                Text(review.content)
+                    .font(.subheadline)
             }
-            
-            Text(content)
-                .font(.subheadline)
         }
+        .onTapGesture(perform: onTap)
     }
 }
 
 
 #Preview {
-    ReviewView(rating: 9, author: "Foo", content: "Today is a nice day. Who would have thought so. Or maybe it isn't. Could be so too.")
-        .preferredColorScheme(.dark)
+    @State @Previewable var reviewState: Review? = nil
+    let movieRep = MockMovieRepository()
+
+    Group {
+        if let review = reviewState {
+            ReviewView(review)
+        } else {
+            ProgressView()
+        }
+    }
+    .preferredColorScheme(.dark)
+    .task {
+        reviewState = try! await movieRep.fetchReviewsListPage(for: 550, 1).results[1]
+    }
 }
+

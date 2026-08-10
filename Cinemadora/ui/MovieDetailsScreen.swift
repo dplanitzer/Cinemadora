@@ -10,7 +10,9 @@ import SwiftUI
 struct MovieDetailsScreen: View {
     
     private let model: MovieViewModel
-    var namespace: Namespace.ID
+    private var namespace: Namespace.ID
+
+    @State private var selectedReview: Review? = nil
 
     
     init(_ model: MovieViewModel, _ namespace: Namespace.ID) {
@@ -49,13 +51,27 @@ struct MovieDetailsScreen: View {
                     .frame(height: 30)
                     
                     ScrollView {
-                        MovieInfoView(model)
+                        MovieInfoView(model, onTapReview: { review in
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                                        selectedReview = review
+                                                    }
+                        })
                     }
                     .scrollIndicators(.hidden)
                     .offset(y: -30)
                     .background(.background)
                     .ignoresSafeArea(edges: .bottom)
                 }
+                
+                if let theReview = selectedReview {
+                    ReviewOverlayView(theReview) {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                selectedReview = nil
+                            }
+                        }
+                        .transition(.opacity)
+                }
+
             }
             .navigationTransition(.zoom(sourceID: model.id, in: namespace))
         }
@@ -70,9 +86,13 @@ private struct MovieInfoView: View {
     @State private var credits: CreditsViewModel
     @State private var reviews: ReviewsViewModel
 
+    private let onTapReview: (Review) -> Void
+
     
-    init(_ model: MovieViewModel) {
+    init(_ model: MovieViewModel, onTapReview: @escaping (Review) -> Void) {
         self.model = model
+        self.onTapReview = onTapReview
+        
         self.details = model.makeDetailsViewModel()
         self.credits = model.makeCreditsViewModel()
         self.reviews = model.makeReviewsViewModel()
@@ -146,7 +166,7 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                ReviewListView(reviews)
+                ReviewListView(reviews, onTapReview)
             }
             
 
