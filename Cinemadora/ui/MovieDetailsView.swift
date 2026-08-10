@@ -153,30 +153,7 @@ private struct MovieInfoView: View {
                         .font(.headline)
                         .bold()
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 16) {
-                            ForEach(companies, id: \.id) { company in
-                                AsyncImageView(details.image(for: company), size: .middle) { state in
-                                    switch state {
-                                    case .loaded(let image):
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .scaledToFit()
-                                                    
-                                    default:
-                                        Color(white: 0.22)
-                                    }
-                                }
-                                .frame(width: 134, height: 38)
-                                .background(Color(white: 1.0))
-                                .padding(4)
-                                .border(.white, width: 4)
-                            }
-                        }
-                        .padding(.horizontal)
-                        .scrollTargetLayout()
-                    }
-                    .scrollTargetBehavior(.viewAligned)
+                    StudioListView(companies, details.image(for:))
                 }
             }
 
