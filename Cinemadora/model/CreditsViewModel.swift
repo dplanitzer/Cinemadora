@@ -31,6 +31,8 @@ final class CreditsViewModel {
     
     private(set) var crew: [CrewMember] = []
 
+    private(set) var director: CrewMember?
+
     func makePersonDetailsViewModel(for personId: Int) -> PersonDetailsViewModel {
         
         return PersonDetailsViewModel(personId, movieRep, imageRep)
@@ -47,6 +49,7 @@ final class CreditsViewModel {
         
         do {
             credits = try await movieRep.fetchCredits(for: movieId)
+            director = credits!.crew.first(where: { $0.job == "Director" })
             
             // Unqiue the cast and crew arrays. An person may appear more than once because
             // e.g. they played multiple roles

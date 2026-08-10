@@ -29,6 +29,9 @@ final class MovieViewModel : Identifiable {
     
     let posterImage: ImageLocator
 
+    var releaseYear: String {
+        return String(movie.releaseDate?.split(separator: "-").first ?? "????")
+    }
     
     private(set) var hasFetchedGenres: Bool = false
     

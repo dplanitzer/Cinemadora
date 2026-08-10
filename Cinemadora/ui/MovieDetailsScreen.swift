@@ -95,6 +95,9 @@ private struct MovieInfoView: View {
                     RatingView(voteAverage: voteAvg, voteCount: movie.voteCount)
                 }
                 
+
+                ReleaseYearView(model.releaseYear)
+
                 
                 if let runtime = details.details?.runtime {
                     RuntimeView(runtime)
@@ -102,13 +105,13 @@ private struct MovieInfoView: View {
             }
 
             
-            if let releaseDate = movie.releaseDate, !releaseDate.isEmpty {
-                HStack(spacing: 4) {
-                    Text("Release Date")
+            if let director = credits.director {
+                HStack(spacing: 8) {
+                    Text("Director")
                         .font(.footnote)
                         .bold()
                     
-                    Text(releaseDate)
+                    Text(director.name)
                         .font(.footnote)
                 }
             }
@@ -161,7 +164,7 @@ private struct MovieInfoView: View {
             if details.details?.budget != nil || details.details?.revenue != nil {
                 HStack(spacing: 16) {
                     if let budget = details.details?.budget {
-                        HStack(spacing: 4) {
+                        HStack(spacing: 8) {
                             Text("Budget")
                                 .font(.footnote)
                                 .bold()
@@ -172,7 +175,7 @@ private struct MovieInfoView: View {
                     
                     
                     if let revenue = details.details?.revenue {
-                        HStack(spacing: 4) {
+                        HStack(spacing: 8) {
                             Text("Revenue")
                                 .font(.footnote)
                                 .bold()
