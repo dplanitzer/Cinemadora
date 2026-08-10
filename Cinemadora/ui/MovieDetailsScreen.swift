@@ -191,28 +191,15 @@ private struct MovieInfoView: View {
 }
 
 
-private struct PreviewWrapper: View {
-    
-    private let model: MovieViewModel
-    @Namespace private var previewNamespace
-    
-    init(_ model: MovieViewModel) {
-        self.model = model
-    }
-    
-    var body: some View {
-        MovieDetailsScreen(model, previewNamespace)
-    }
-}
-
-
 #Preview {
     @State @Previewable var movieState: Movie? = nil
     let movieRep = MockMovieRepository()
 
     Group {
         if let movie = movieState {
-            PreviewWrapper(MovieViewModel(movie, movieRep, MockImageRepository()))
+            PreviewWrapper(MovieViewModel(movie, movieRep, MockImageRepository())) { model, namespace in
+                MovieDetailsScreen(model, namespace)
+            }
         } else {
             ProgressView()
         }

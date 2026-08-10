@@ -93,21 +93,8 @@ private struct PersonInfoView: View {
 }
 
 
-private struct PreviewWrapper: View {
-    
-    private let model: PersonDetailsViewModel
-    @Namespace private var previewNamespace
-    
-    init(_ model: PersonDetailsViewModel) {
-        self.model = model
-    }
-    
-    var body: some View {
-        PersonDetailsScreen(model, previewNamespace)
-    }
-}
-
-
 #Preview {
-    PreviewWrapper(PersonDetailsViewModel(31, MockMovieRepository(), MockImageRepository()))
+    PreviewWrapper(PersonDetailsViewModel(31, MockMovieRepository(), MockImageRepository())) { model, namespace in
+        PersonDetailsScreen(model, namespace)
+    }
 }
