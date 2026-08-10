@@ -29,13 +29,22 @@ struct StudioListView: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .scaledToFit()
-                                                    
+                                      
+                        case .failed, .fallback:
+                            Text(company.name)
+                                .font(.system(size: 14, weight: .medium))
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.4)    // Let the font auto-scale down to ensure that the text doesn't get clipped
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.black)
+                                .padding(.horizontal, 2)
+                            
                         default:
-                            Color(white: 0.22)
+                            Color.white
                         }
                     }
                     .frame(width: 134, height: 38)
-                    .background(Color(white: 1.0))
+                    .background(Color.white)
                     .padding(4)
                     .border(.white, width: 4)
                 }
@@ -48,7 +57,7 @@ struct StudioListView: View {
 }
 
 
-#Preview {
+#Preview("Success") {
     @State @Previewable var movieDetails: MovieDetails? = nil
     let movieRep = MockMovieRepository()
     let imageRep = MockImageRepository()
@@ -57,6 +66,26 @@ struct StudioListView: View {
         if let details = movieDetails {
             StudioListView(details.productionCompanies, { company in
                 ImageLocator(imageRep, company.logoPath, .logo)
+            })
+        } else {
+            ProgressView()
+        }
+    }
+    .preferredColorScheme(.dark)
+    .task {
+        movieDetails = try! await movieRep.fetchMovieDetails(for: 550)
+    }
+}
+
+#Preview("Failure") {
+    @State @Previewable var movieDetails: MovieDetails? = nil
+    let movieRep = MockMovieRepository()
+    let imageRep = MockImageRepository()
+
+    Group {
+        if let details = movieDetails {
+            StudioListView(details.productionCompanies, { company in
+                ImageLocator(imageRep, "/does_not_exist", .logo)
             })
         } else {
             ProgressView()
