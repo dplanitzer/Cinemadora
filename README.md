@@ -1,7 +1,7 @@
 # Cinemadora
 Cinemadora is an easy to use movie information app for iOS. It uses the TMDB movie database REST API to get information about popular movies and TV shows. The purpose of this project is to show how to leverage the latest development tools &amp; techniques to successfully create a modern iOS app.
 
-<video src="https://github.com/user-attachments/assets/4e114189-2df2-47e3-a155-dc6ac2cd8d13" width="480" controls></video>
+<video src="https://github.com/user-attachments/assets/3ef3c8c9-1400-4bcc-972a-63b51a778e3a" width="480" controls></video>
 
 The code showcases how to use the following techniques &amp; technologies:
 * Swift UI
@@ -16,7 +16,7 @@ The code showcases how to use the following techniques &amp; technologies:
 Check out the project to your disk. Then create a text file with the name `Local.xcconfig` and place it inside the `Cinemadora` project folder (put it next to the `Info.plist` file). Add the following text to this file:
 
 ```
-API_KEY = <your TBMD API key here>
+API_KEY = <your TMDB API key here>
 DEVELOPMENT_TEAM = <your Apple development team ID here>
 ```
 
