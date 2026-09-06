@@ -105,7 +105,7 @@ private struct MovieInfoView: View {
                 .bold()
                     
                     
-            MovieGenresView(model)
+            GenreListView(model.genres)
 
             
             HStack(spacing: 16) {
@@ -206,6 +206,7 @@ private struct MovieInfoView: View {
         }
         .padding(.horizontal, 10)
         .task {
+            await model.fetchGenres()
             await details.fetchDetails()
         }
     }

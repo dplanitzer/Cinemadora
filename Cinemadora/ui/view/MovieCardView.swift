@@ -28,7 +28,7 @@ struct MovieCardView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 
-                MovieGenresView(model)
+                GenreListView(model.genres)
                 
                 
                 HStack {
@@ -81,6 +81,9 @@ struct MovieCardView: View {
             .clipShape(.rect(cornerRadius: 60.0))
         }
         .foregroundColor(.primary)
+        .task {
+            await model.fetchGenres()
+        }
     }
 }
 
