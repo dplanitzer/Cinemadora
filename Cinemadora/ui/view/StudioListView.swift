@@ -24,38 +24,47 @@ struct StudioListView: View {
     
     var body: some View {
         
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 16) {
-                ForEach(studios, id: \.id) { company in
-                    AsyncImageView(imageResolver(company), size: .middle) { state in
-                        switch state {
-                        case .loaded(let image):
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                                      
-                        case .failed, .fallback:
-                            Text(company.name)
-                                .font(.system(size: 14, weight: .medium))
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.4)    // Let the font auto-scale down to ensure that the text doesn't get clipped
-                                .multilineTextAlignment(.center)
-                                .foregroundStyle(.black)
-                                .padding(.horizontal, 2)
-                            
-                        default:
-                            Color.white
-                        }
+        Carousel(
+            items: studios,
+            spacing: 16.0,
+            content: { company in
+                AsyncImageView(imageResolver(company), size: .middle) { state in
+                    switch state {
+                    case .loaded(let image):
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                                  
+                    case .failed, .fallback:
+                        Text(company.name)
+                            .font(.system(size: 14, weight: .medium))
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.4)    // Let the font auto-scale down to ensure that the text doesn't get clipped
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.black)
+                            .padding(.horizontal, 2)
+                        
+                    default:
+                        Color.white
                     }
+                }
+                .frame(width: LOGO_WIDTH, height: LOGO_HEIGHT)
+                .background(Color.white)
+                .padding(4)
+                .border(.white, width: 4)
+            },
+            placeholder: {
+                Image(systemName: "square.slash")
+                    .symbolVariant(.slash)
+                    .foregroundStyle(.black)
+                    .font(.system(size: 32, weight: .medium))
                     .frame(width: LOGO_WIDTH, height: LOGO_HEIGHT)
                     .background(Color.white)
                     .padding(4)
                     .border(.white, width: 4)
-                }
             }
-            .scrollTargetLayout()
-        }
-        .scrollTargetBehavior(.viewAligned)
+        )
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -80,6 +89,7 @@ struct StudioListView: View {
     }
 }
 
+
 #Preview("Failure") {
     @State @Previewable var movieDetails: MovieDetails? = nil
     let movieRep = MockMovieRepository()
@@ -98,4 +108,16 @@ struct StudioListView: View {
     .task {
         movieDetails = try! await movieRep.fetchMovieDetails(for: 550)
     }
+}
+
+
+#Preview("No Studios") {
+    let imageRep = MockImageRepository()
+
+    Group {
+        StudioListView([], { company in
+            ImageLocator(imageRep, "/does_not_exist", .logo)
+        })
+    }
+    .preferredColorScheme(.dark)
 }
