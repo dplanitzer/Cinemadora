@@ -13,6 +13,7 @@ struct MovieCardView: View {
     
     
     init(_ model: MovieViewModel) {
+        
         self.model = model
     }
     

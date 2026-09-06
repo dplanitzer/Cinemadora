@@ -14,6 +14,7 @@ struct ReviewOverlayView: View {
     
     
     init(_ review: Review, _ onClose: @escaping () -> Void = {}) {
+        
         self.review = review
         self.onClose = onClose
     }

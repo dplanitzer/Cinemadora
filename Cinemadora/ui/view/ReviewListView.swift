@@ -15,7 +15,7 @@ struct ReviewListView: View {
     private let onTapReview: (Review) -> Void
     
     
-    init(_ feed: ReviewsFeed, _ onTapReview: @escaping (Review) -> Void) {
+    init(_ feed: ReviewsFeed, _ onTapReview: @escaping (Review) -> Void = { _ in }) {
         
         self.feed = feed
         self.onTapReview = onTapReview
@@ -43,7 +43,7 @@ struct ReviewListView: View {
 #Preview {
     let feed = MockMovieRepository().reviewsFeed(for: 550)
     
-    ReviewListView(feed, { _ in })
+    ReviewListView(feed)
         .preferredColorScheme(.dark)
         .onAppear {
             Task {

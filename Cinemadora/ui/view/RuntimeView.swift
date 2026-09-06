@@ -12,6 +12,7 @@ struct RuntimeView: View {
     private let runtime: Int        // In minutes
     
     init(_ runtime: Int) {
+        
         self.runtime = runtime
     }
     

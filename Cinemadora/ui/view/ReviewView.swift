@@ -14,6 +14,7 @@ struct ReviewView: View {
     
     
     init(_ review: Review, _ onTap: @escaping () -> Void = {}) {
+        
         self.review = review
         self.onTap = onTap
     }

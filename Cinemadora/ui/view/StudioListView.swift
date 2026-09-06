@@ -17,6 +17,7 @@ struct StudioListView: View {
 
     
     init(_ studios: [CompanySummary], _ imageResolver: @escaping (CompanySummary) -> ImageLocator) {
+        
         self.studios = studios
         self.imageResolver = imageResolver
     }

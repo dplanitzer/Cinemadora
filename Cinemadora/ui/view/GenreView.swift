@@ -13,6 +13,7 @@ struct GenreView: View {
     
     
     init(_ genre: Genre) {
+        
         self.genre = genre
     }
     

@@ -14,6 +14,7 @@ struct RatingView: View {
     private let voteCount: Int?
     
     init(voteAverage: Double, showVoteMax: Bool = true, voteCount: Int? = nil) {
+        
         self.voteAverage = voteAverage
         self.showVoteMax = showVoteMax
         self.voteCount = voteCount

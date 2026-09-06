@@ -12,6 +12,7 @@ struct ReleaseYearView: View {
     private let year: String
     
     init(_ year: String) {
+        
         self.year = year
     }
     
