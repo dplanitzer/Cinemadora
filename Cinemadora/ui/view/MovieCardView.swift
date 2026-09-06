@@ -9,17 +9,19 @@ import SwiftUI
 
 struct MovieCardView: View {
     
-    @State private var model: MovieViewModel
+    private let movie: Movie
+    private let genres: [Genre]
+    private let posterImage: ImageLocator
     
     
-    init(_ model: MovieViewModel) {
+    init(movie: Movie, genres: [Genre], posterImage: ImageLocator) {
         
-        self.model = model
+        self.movie = movie
+        self.genres = genres
+        self.posterImage = posterImage
     }
     
     var body: some View {
-        
-        let movie = model.movie
         
         VStack(spacing: 18) {
             VStack(spacing: 18) {
@@ -29,7 +31,7 @@ struct MovieCardView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 
-                GenreListView(model.genres)
+                GenreListView(genres)
                 
                 
                 HStack {
@@ -49,7 +51,7 @@ struct MovieCardView: View {
             .padding(.horizontal, 10.0)
             
             
-            AsyncImageView(model.posterImage) { state in
+            AsyncImageView(posterImage) { state in
                 switch state {
                 case .loading:
                     Color(white: 0.22)
@@ -82,9 +84,6 @@ struct MovieCardView: View {
             .clipShape(.rect(cornerRadius: 60.0))
         }
         .foregroundColor(.primary)
-        .task {
-            await model.fetchGenres()
-        }
     }
 }
 
@@ -92,10 +91,13 @@ struct MovieCardView: View {
 #Preview {
     @State @Previewable var movieState: Movie? = nil
     let movieRep = MockMovieRepository()
+    let imageRep = MockImageRepository()
 
     Group {
         if let movie = movieState {
-            MovieCardView(MovieViewModel(movie, movieRep, MockImageRepository()))
+            let model = MovieViewModel(movie, movieRep, imageRep)
+            
+            MovieCardView(movie: movie, genres: model.genres, posterImage: model.posterImage)
         } else {
             ProgressView()
         }
