@@ -55,8 +55,7 @@ final class MovieViewModel : Identifiable {
         hasFetchedGenres = true
     }
     
-    
-    
+        
     func makeDetailsViewModel() -> MovieDetailsViewModel {
         
         return MovieDetailsViewModel(movie.id, movieRep, imageRep)
@@ -65,10 +64,5 @@ final class MovieViewModel : Identifiable {
     func makeCreditsViewModel() -> CreditsViewModel {
         
         return CreditsViewModel(movie.id, movieRep, imageRep)
-    }
-    
-    func makeReviewsViewModel() -> ReviewsViewModel {
-        
-        return ReviewsViewModel(movie.id, movieRep, imageRep)
     }
 }

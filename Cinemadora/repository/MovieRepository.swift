@@ -31,3 +31,11 @@ protocol MovieRepository {
 
     func genre(for id: Int) async throws -> String?
 }
+
+
+extension MovieRepository {
+    
+    func reviewsFeed(for movieId: Int) -> ReviewsFeed {
+        return ReviewsFeed(movieId, self)
+    }
+}

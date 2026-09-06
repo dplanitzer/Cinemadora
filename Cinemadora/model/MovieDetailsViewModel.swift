@@ -16,12 +16,23 @@ final class MovieDetailsViewModel {
     
     
     init(_ movieId: Int, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
+        
         self.movieId = movieId
         self.movieRep = movieRep
         self.imageRep = imageRep
+        self.reviewsFeed = movieRep.reviewsFeed(for: movieId)
     }
     
+    
     private(set) var details: MovieDetails?
+    
+    let reviewsFeed: ReviewsFeed
+
+    func image(for company: CompanySummary) -> ImageLocator {
+        
+        return ImageLocator(imageRep, company.logoPath, .logo)
+    }
+
     
     func fetchDetails() async {
         
@@ -29,13 +40,12 @@ final class MovieDetailsViewModel {
         
         do {
             details = try await movieRep.fetchMovieDetails(for: movieId)
+            
+            if reviewsFeed.items.isEmpty && reviewsFeed.hasMore && !reviewsFeed.isLoading {
+                await reviewsFeed.fetchMore()
+            }
         } catch {
             print(error.localizedDescription)
         }
-    }
-    
-    func image(for company: CompanySummary) -> ImageLocator {
-        
-        return ImageLocator(imageRep, company.logoPath, .logo)
     }
 }

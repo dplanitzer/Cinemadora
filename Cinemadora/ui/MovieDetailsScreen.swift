@@ -84,7 +84,6 @@ private struct MovieInfoView: View {
     @State private var model: MovieViewModel
     @State private var details: MovieDetailsViewModel
     @State private var credits: CreditsViewModel
-    @State private var reviews: ReviewsViewModel
 
     private let onTapReview: (Review) -> Void
 
@@ -95,7 +94,6 @@ private struct MovieInfoView: View {
         
         self.details = model.makeDetailsViewModel()
         self.credits = model.makeCreditsViewModel()
-        self.reviews = model.makeReviewsViewModel()
     }
     
     var body: some View {
@@ -166,7 +164,7 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                ReviewListView(reviews, onTapReview)
+                ReviewListView(details.reviewsFeed, onTapReview)
             }
             
 
