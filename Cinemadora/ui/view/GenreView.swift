@@ -9,16 +9,16 @@ import SwiftUI
 
 struct GenreView: View {
     
-    private let name: String
+    private let genre: Genre
     
     
-    init(_ name: String) {
-        self.name = name
+    init(_ genre: Genre) {
+        self.genre = genre
     }
     
     var body: some View {
         
-        Text(name)
+        Text(genre.name)
             .font(.footnote)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
@@ -32,9 +32,9 @@ struct GenreView: View {
 
 #Preview {
     HStack(spacing: 10) {
-        GenreView("Action")
-        GenreView("Drama")
-        GenreView("Horror")
+        GenreView(Genre(id: 1, name: "Action"))
+        GenreView(Genre(id: 2, name: "Drama"))
+        GenreView(Genre(id: 3, name: "Horror"))
     }
     .preferredColorScheme(.dark)
 }

@@ -10,7 +10,7 @@ import Foundation
 actor TMDBMovieRepository : MovieRepository {
     
     private let service: TMDBService
-    private var genres: Dictionary<Int, String> = [:]
+    private var genres: Dictionary<Int, Genre> = [:]
 
     
     init(_ service: TMDBService) {
@@ -60,13 +60,13 @@ actor TMDBMovieRepository : MovieRepository {
         return try await service.fetch(from: "https://api.themoviedb.org/3/company/\(companyId)", type: CompanyDetails.self)
     }
 
-    func genre(for id: Int) async throws -> String? {
+    func genre(for id: Int) async throws -> Genre? {
 
         if genres.isEmpty {
             let r = try await service.fetch(from: "https://api.themoviedb.org/3/genre/movie/list?language=\(languageRegion)", type: GenreList.self)
 
             for genre in r.genres {
-                genres[genre.id] = genre.name
+                genres[genre.id] = genre
             }
         }
         

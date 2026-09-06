@@ -9,10 +9,10 @@ import SwiftUI
 
 struct GenreListView: View {
     
-    private let genres: [String]
+    private let genres: [Genre]
     
     
-    init(_ genres: [String]) {
+    init(_ genres: [Genre]) {
         
         self.genres = genres
     }
@@ -22,7 +22,7 @@ struct GenreListView: View {
         if !genres.isEmpty {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    ForEach(genres, id: \.self) { genre in
+                    ForEach(genres) { genre in
                         GenreView(genre)
                     }
                 }
@@ -31,7 +31,7 @@ struct GenreListView: View {
             // Show an effectively invisible dummy genre so that we can keep the
             // height of this UI element stable no matter whether the genres have
             // already been loaded or not
-            GenreView("Invisible")
+            GenreView(Genre(id: 1, name: "Invisible"))
                 .opacity(0.0)
         }
     }
@@ -44,7 +44,7 @@ struct GenreListView: View {
             .frame(height: 2)
             .overlay(Color.white)
         
-        GenreListView(["Action", "Drama", "Horror"])
+        GenreListView([Genre(id: 1, name: "Action"), Genre(id: 2, name: "Drama"), Genre(id: 3, name: "Horror")])
         
         Divider()
             .frame(height: 2)

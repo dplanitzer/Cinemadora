@@ -9,7 +9,7 @@ import Foundation
 
 actor MockMovieRepository : MovieRepository {
     
-    private var genres: Dictionary<Int, String> = [:]
+    private var genres: Dictionary<Int, Genre> = [:]
     
     
     func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
@@ -47,13 +47,13 @@ actor MockMovieRepository : MovieRepository {
         return try await fetch(from: "lucasfilm", type: CompanyDetails.self)
     }
 
-    func genre(for id: Int) async throws -> String? {
+    func genre(for id: Int) async throws -> Genre? {
 
         if genres.isEmpty {
             let r = try await fetch(from: "movie_genres", type: GenreList.self)
 
             for genre in r.genres {
-                genres[genre.id] = genre.name
+                genres[genre.id] = genre
             }
         }
         

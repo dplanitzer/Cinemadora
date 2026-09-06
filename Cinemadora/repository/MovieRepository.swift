@@ -29,7 +29,7 @@ protocol MovieRepository {
     
     func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails
 
-    func genre(for id: Int) async throws -> String?
+    func genre(for id: Int) async throws -> Genre?
 }
 
 

@@ -36,7 +36,7 @@ final class MovieViewModel : Identifiable {
     private(set) var hasFetchedGenres: Bool = false
     
     // Loaded genres, sorted by name
-    private(set) var genres: [String] = []
+    private(set) var genres: [Genre] = []
 
     func fetchGenres() async {
         
@@ -45,11 +45,11 @@ final class MovieViewModel : Identifiable {
         do {
             genres = []
             for genreId in movie.genreIds {
-                if let genreName = try await movieRep.genre(for: genreId) {
-                    genres.append(genreName)
+                if let genre = try await movieRep.genre(for: genreId) {
+                    genres.append(genre)
                 }
             }
-            genres.sort()
+            genres.sort { $0.name < $1.name }
         } catch {
         }
         hasFetchedGenres = true
