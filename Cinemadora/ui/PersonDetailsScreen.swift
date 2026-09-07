@@ -96,7 +96,9 @@ private struct PersonInfoView: View {
 
 
 #Preview {
-    PreviewWrapper(PersonDetailsViewModel(31, MockMovieRepository(), MockImageRepository())) { model, namespace in
+    let appContainer = AppContainer.mocked()
+    
+    PreviewWrapper(PersonDetailsViewModel(31, appContainer)) { model, namespace in
         PersonDetailsScreen(model, namespace)
     }
 }

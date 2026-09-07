@@ -9,15 +9,14 @@ import Foundation
 
 @Observable
 final class PersonDetailsViewModel : Identifiable {
+    
+    private let appContainer: AppContainer
+    
+    
+    init(_ personId: Int, _ appContainer: AppContainer) {
         
-    private let movieRep: MovieRepository
-    private let imageRep: ImageRepository
-    
-    
-    init(_ personId: Int, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
         self.id = personId
-        self.movieRep = movieRep
-        self.imageRep = imageRep
+        self.appContainer = appContainer
     }
     
     private(set) var details: PersonDetails?
@@ -27,7 +26,7 @@ final class PersonDetailsViewModel : Identifiable {
         guard details == nil else { return }
         
         do {
-            details = try await movieRep.fetchPersonDetails(for: id)
+            details = try await appContainer.movieRepository.fetchPersonDetails(for: id)
         } catch {
             print(error.localizedDescription)
         }
@@ -37,6 +36,6 @@ final class PersonDetailsViewModel : Identifiable {
 
     var profileImage: ImageLocator {
         
-        return ImageLocator(imageRep, details?.profilePath, .profile)
+        return ImageLocator(appContainer.imageRepository, details?.profilePath, .profile)
     }
 }

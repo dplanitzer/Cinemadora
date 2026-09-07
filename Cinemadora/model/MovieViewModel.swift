@@ -10,15 +10,14 @@ import Foundation
 @Observable
 final class MovieViewModel : Identifiable {
     
-    private let movieRep: MovieRepository
-    private let imageRep: ImageRepository
+    private let appContainer: AppContainer
         
     
-    init(_  movie: Movie, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
+    init(_  movie: Movie, _ appContainer: AppContainer) {
+        
         self.movie = movie
-        self.movieRep = movieRep
-        self.imageRep = imageRep
-        self.posterImage = ImageLocator(imageRep, movie.posterPath, .poster)
+        self.appContainer = appContainer
+        self.posterImage = ImageLocator(appContainer.imageRepository, movie.posterPath, .poster)
     }
 
     var id: Int {
@@ -45,7 +44,7 @@ final class MovieViewModel : Identifiable {
         do {
             genres = []
             for genreId in movie.genreIds {
-                if let genre = try await movieRep.genre(for: genreId) {
+                if let genre = try await appContainer.movieRepository.genre(for: genreId) {
                     genres.append(genre)
                 }
             }
@@ -58,6 +57,6 @@ final class MovieViewModel : Identifiable {
         
     func makeDetailsViewModel() -> MovieDetailsViewModel {
         
-        return MovieDetailsViewModel(movie.id, movieRep, imageRep)
+        return MovieDetailsViewModel(movie.id, appContainer)
     }
 }

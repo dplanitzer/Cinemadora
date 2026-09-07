@@ -278,11 +278,11 @@ private struct MovieInfoView: View {
 
 #Preview {
     @State @Previewable var movieState: Movie? = nil
-    let movieRep = MockMovieRepository()
+    let appContainer = AppContainer.mocked()
 
     Group {
         if let movie = movieState {
-            PreviewWrapper(MovieViewModel(movie, movieRep, MockImageRepository())) { model, namespace in
+            PreviewWrapper(MovieViewModel(movie, appContainer)) { model, namespace in
                 MovieDetailsScreen(model, namespace)
             }
         } else {
@@ -291,6 +291,6 @@ private struct MovieInfoView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        movieState = try! await movieRep.fetchMovieListPage(for: .popular, 1).results.first!
+        movieState = try! await appContainer.movieRepository.fetchMovieListPage(for: .popular, 1).results.first!
     }
 }

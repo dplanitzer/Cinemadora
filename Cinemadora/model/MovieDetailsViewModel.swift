@@ -9,18 +9,16 @@ import Foundation
 
 @Observable
 final class MovieDetailsViewModel {
-        
-    private let movieRep: MovieRepository
-    private let imageRep: ImageRepository
+    
+    private let appContainer: AppContainer
     private let movieId: Int
     
     
-    init(_ movieId: Int, _ movieRep: MovieRepository, _ imageRep: ImageRepository) {
-        
+    init(_ movieId: Int, _ appContainer: AppContainer) {
+
         self.movieId = movieId
-        self.movieRep = movieRep
-        self.imageRep = imageRep
-        self.reviewsFeed = movieRep.reviewsFeed(for: movieId)
+        self.appContainer = appContainer
+        self.reviewsFeed = appContainer.movieRepository.reviewsFeed(for: movieId)
     }
     
     
@@ -37,12 +35,12 @@ final class MovieDetailsViewModel {
 
     func image(for member: any Person) -> ImageLocator {
         
-        return ImageLocator(imageRep, member.profilePath, .profile)
+        return ImageLocator(appContainer.imageRepository, member.profilePath, .profile)
     }
 
     func makePersonDetailsViewModel(for personId: Int) -> PersonDetailsViewModel {
         
-        return PersonDetailsViewModel(personId, movieRep, imageRep)
+        return PersonDetailsViewModel(personId, appContainer)
     }
 
     
@@ -51,7 +49,7 @@ final class MovieDetailsViewModel {
     
     func image(for company: CompanySummary) -> ImageLocator {
         
-        return ImageLocator(imageRep, company.logoPath, .logo)
+        return ImageLocator(appContainer.imageRepository, company.logoPath, .logo)
     }
 
     
@@ -65,7 +63,7 @@ final class MovieDetailsViewModel {
         guard details == nil else { return }
         
         do {
-            details = try await movieRep.fetchMovieDetails(for: movieId)
+            details = try await appContainer.movieRepository.fetchMovieDetails(for: movieId)
             
             if let credits = details?.credits {
                 director = credits.crew.first(where: { $0.job == "Director" })

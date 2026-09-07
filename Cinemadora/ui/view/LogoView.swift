@@ -78,15 +78,14 @@ struct LogoView: View {
 
 #Preview("Failure") {
     @State @Previewable var movieDetails: MovieDetails? = nil
-    let movieRep = MockMovieRepository()
-    let imageRep = MockImageRepository()
+    let appContainer = AppContainer.mocked()
 
     Group {
         if let details = movieDetails {
             LogoView(
                 details.productionCompanies.first!,
                 { company in
-                    ImageLocator(imageRep, "/does_not_exist", .logo)
+                    ImageLocator(appContainer.imageRepository, "/does_not_exist", .logo)
                 }
             )
         } else {
@@ -95,6 +94,6 @@ struct LogoView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        movieDetails = try! await movieRep.fetchMovieDetails(for: 550)
+        movieDetails = try! await appContainer.movieRepository.fetchMovieDetails(for: 550)
     }
 }

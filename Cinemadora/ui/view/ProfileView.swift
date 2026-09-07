@@ -79,15 +79,14 @@ struct ProfileView: View {
 
 #Preview {
     @State @Previewable var person: (any Person)? = nil
-    let movieRep = MockMovieRepository()
-    let imageRep = MockImageRepository()
+    let appContainer = AppContainer.mocked()
 
     Group {
         if let person = person {
             ProfileView(
                 person,
                 { (person: any Person) in
-                    return ImageLocator(imageRep, person.profilePath, .profile)
+                    return ImageLocator(appContainer.imageRepository, person.profilePath, .profile)
                 }
             )
         } else {
@@ -96,6 +95,6 @@ struct ProfileView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        person = try! await movieRep.fetchCredits(for: 550).cast.first
+        person = try! await appContainer.movieRepository.fetchCredits(for: 550).cast.first
     }
 }

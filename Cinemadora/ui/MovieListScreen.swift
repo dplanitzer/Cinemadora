@@ -109,6 +109,8 @@ struct MovieListScreen: View {
 
 
 #Preview {
-    MovieListScreen(MovieListViewModel(.popular, MockMovieRepository(), MockImageRepository()))
+    let appContainer = AppContainer.mocked()
+    
+    MovieListScreen(MovieListViewModel(.popular, appContainer))
         .preferredColorScheme(.dark)
 }

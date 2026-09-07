@@ -46,7 +46,7 @@ struct ReviewView: View {
 
 #Preview {
     @State @Previewable var reviewState: Review? = nil
-    let movieRep = MockMovieRepository()
+    let appContainer = AppContainer.mocked()
 
     Group {
         if let review = reviewState {
@@ -57,7 +57,7 @@ struct ReviewView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        reviewState = try! await movieRep.fetchReviewsListPage(for: 550, 1).results[1]
+        reviewState = try! await appContainer.movieRepository.fetchReviewsListPage(for: 550, 1).results[1]
     }
 }
 

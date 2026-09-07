@@ -40,6 +40,7 @@
 		5554A7463011853E001C8C5D /* Exceptions for "Cinemadora" folder in "CinemadoraTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AppContainer.swift,
 				Assets.xcassets,
 				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,
@@ -89,6 +90,7 @@
 		5554A7473011853E001C8C5D /* Exceptions for "Cinemadora" folder in "CinemadoraUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AppContainer.swift,
 				Assets.xcassets,
 				model/ImageLocator.swift,
 				model/MovieDetailsViewModel.swift,

@@ -103,8 +103,7 @@ struct MovieCardView: View {
 
 #Preview {
     @State @Previewable var movieModel: MovieViewModel? = nil
-    let movieRep = MockMovieRepository()
-    let imageRep = MockImageRepository()
+    let appContainer = AppContainer.mocked()
 
     Group {
         if let model = movieModel {
@@ -115,9 +114,9 @@ struct MovieCardView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        let movie = try! await movieRep.fetchMovieListPage(for: .popular, 1).results.first!
+        let movie = try! await appContainer.movieRepository.fetchMovieListPage(for: .popular, 1).results.first!
         
-        movieModel =  MovieViewModel(movie, movieRep, imageRep)
+        movieModel =  MovieViewModel(movie, appContainer)
         await movieModel?.fetchGenres()
     }
 }
