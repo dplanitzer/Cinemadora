@@ -107,8 +107,21 @@ private struct MovieInfoView: View {
                 .font(.title)
                 .bold()
                     
-                    
-            GenreListView(model.genres)
+            
+            Carousel(
+                items: model.genres,
+                spacing: 8.0,
+                content: { genre in
+                    GenreView(genre)
+                },
+                placeholder: {
+                    // Show an effectively invisible dummy genre so that we can keep the
+                    // height of this UI element stable no matter whether the genres have
+                    // already been loaded or not
+                    GenreView.invisiblePlaceholder()
+                }
+            )
+            .fixedSize(horizontal: false, vertical: true)
 
             
             HStack(spacing: 16) {

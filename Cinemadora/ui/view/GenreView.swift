@@ -31,6 +31,16 @@ struct GenreView: View {
 }
 
 
+extension GenreView {
+    
+    // Creates an invisible placeholder GenreView used for layout spacing
+    static func invisiblePlaceholder() -> some View {
+        GenreView(Genre(id: 1, name: "Invisible"))
+            .opacity(0.0)
+    }
+}
+
+
 #Preview {
     HStack(spacing: 10) {
         GenreView(Genre(id: 1, name: "Action"))

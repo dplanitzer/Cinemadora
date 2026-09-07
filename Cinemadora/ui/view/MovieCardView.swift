@@ -31,7 +31,20 @@ struct MovieCardView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 
-                GenreListView(genres)
+                Carousel(
+                    items: genres,
+                    spacing: 8.0,
+                    content: { genre in
+                        GenreView(genre)
+                    },
+                    placeholder: {
+                        // Show an effectively invisible dummy genre so that we can keep the
+                        // height of this UI element stable no matter whether the genres have
+                        // already been loaded or not
+                        GenreView.invisiblePlaceholder()
+                    }
+                )
+                .fixedSize(horizontal: false, vertical: true)
                 
                 
                 HStack {
@@ -89,21 +102,22 @@ struct MovieCardView: View {
 
 
 #Preview {
-    @State @Previewable var movieState: Movie? = nil
+    @State @Previewable var movieModel: MovieViewModel? = nil
     let movieRep = MockMovieRepository()
     let imageRep = MockImageRepository()
 
     Group {
-        if let movie = movieState {
-            let model = MovieViewModel(movie, movieRep, imageRep)
-            
-            MovieCardView(movie: movie, genres: model.genres, posterImage: model.posterImage)
+        if let model = movieModel {
+            MovieCardView(movie: model.movie, genres: model.genres, posterImage: model.posterImage)
         } else {
             ProgressView()
         }
     }
     .preferredColorScheme(.dark)
     .task {
-        movieState = try! await movieRep.fetchMovieListPage(for: .popular, 1).results.first!
+        let movie = try! await movieRep.fetchMovieListPage(for: .popular, 1).results.first!
+        
+        movieModel =  MovieViewModel(movie, movieRep, imageRep)
+        await movieModel?.fetchGenres()
     }
 }
