@@ -197,7 +197,14 @@ private struct MovieInfoView: View {
                         .font(.headline)
                         .bold()
                     
-                    StudioListView(details.productionCompanies, details.image(for:))
+                    Carousel(
+                        items: details.productionCompanies,
+                        spacing: 16.0,
+                        content: { company in
+                            LogoView(company, details.image(for:))
+                        }
+                    )
+                    .fixedSize(horizontal: false, vertical: true)
                 }
             }
 
