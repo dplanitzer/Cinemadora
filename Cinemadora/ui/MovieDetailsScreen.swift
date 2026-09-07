@@ -147,13 +147,18 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                CreditsView<CastMemberDetailsTarget>(
-                    details.cast,
-                    { (person: any Person) in
-                        return details.image(for: person)
-                    },
-                    castNamespace
+                Carousel(
+                    items: details.cast,
+                    spacing: 16.0,
+                    content: { (member: CastMember) in
+                        NavigationLink(value: CastMemberDetailsTarget(id: member.id)) {
+                            ProfileView(member, details.image(for:))
+                                .matchedTransitionSource(id: member.id, in: castNamespace)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 )
+                .fixedSize(horizontal: false, vertical: true)
             }
             
             
@@ -161,14 +166,19 @@ private struct MovieInfoView: View {
                 Text("Crew")
                     .font(.headline)
                     .bold()
-                
-                CreditsView<CrewMemberDetailsTarget>(
-                    details.crew,
-                    { (person: any Person) in
-                        return details.image(for: person)
-                    },
-                    crewNamespace
+
+                Carousel(
+                    items: details.crew,
+                    spacing: 16.0,
+                    content: { (member: CrewMember) in
+                        NavigationLink(value: CrewMemberDetailsTarget(id: member.id)) {
+                            ProfileView(member, details.image(for:))
+                                .matchedTransitionSource(id: member.id, in: crewNamespace)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 )
+                .fixedSize(horizontal: false, vertical: true)
             }
             
             
