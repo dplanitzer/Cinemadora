@@ -24,19 +24,19 @@ struct CreditsView<Target: NavigationTarget>: View {
     
     var body: some View {
         
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 16) {
-                ForEach(people, id: \.id) { person in
-                    NavigationLink(value: Target(id: person.id)) {
-                        ProfileView(person, imageResolver)
-                            .matchedTransitionSource(id: person.id, in: namespace)
-                    }
-                    .buttonStyle(.plain)
+        Carousel(
+            items: people,
+            id: \.id,
+            spacing: 16.0,
+            content: { person in
+                NavigationLink(value: Target(id: person.id)) {
+                    ProfileView(person, imageResolver)
+                        .matchedTransitionSource(id: person.id, in: namespace)
                 }
+                .buttonStyle(.plain)
             }
-            .scrollTargetLayout()
-        }
-        .scrollTargetBehavior(.viewAligned)
+        )
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 

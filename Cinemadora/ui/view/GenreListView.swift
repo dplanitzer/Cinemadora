@@ -19,7 +19,6 @@ struct GenreListView: View {
     
     var body: some View {
         
-        #if true
         Carousel(
             items: genres,
             spacing: 8.0,
@@ -35,23 +34,6 @@ struct GenreListView: View {
             }
         )
         .fixedSize(horizontal: false, vertical: true)
-#else
-        if !genres.isEmpty {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(genres) { genre in
-                        GenreView(genre)
-                    }
-                }
-            }
-        } else {
-            // Show an effectively invisible dummy genre so that we can keep the
-            // height of this UI element stable no matter whether the genres have
-            // already been loaded or not
-            GenreView(Genre(id: 1, name: "Invisible"))
-                .opacity(0.0)
-        }
-        #endif
     }
 }
 
