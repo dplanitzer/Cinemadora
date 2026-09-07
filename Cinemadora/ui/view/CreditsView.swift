@@ -7,80 +7,41 @@
 
 import SwiftUI
 
-enum CreditsType {
-    case cast
-    case crew
-}
-
-
 struct CreditsView<Target: NavigationTarget>: View {
     
     private let PROFILE_WIDTH = 72.0
     private let PROFILE_HEIGHT = 110.0
     
-    @Namespace private var profileNamespace
+    private var namespace: Namespace.ID
 
-    @State private var model: CreditsViewModel
-    private let creditsType: CreditsType
+    private let people: [any Person]
+    private let imageResolver: (any Person) -> ImageLocator
     
     
-    init(_ model: CreditsViewModel, _ type: CreditsType) {
-        self.model = model
-        self.creditsType = type
+    init(_ people: [any Person], _ imageResolver: @escaping (any Person) -> ImageLocator, _ namespace: Namespace.ID) {
+        
+        self.people = people
+        self.imageResolver = imageResolver
+        self.namespace = namespace
     }
     
     var body: some View {
         
-        if model.hasFetchedCredits {
-            showCredits()
-        }
-        else {
-            showPlaceholder()
-                .task {
-                    await model.fetchCredits()
-                }
-        }
-    }
-    
-    @ViewBuilder
-    private func showPlaceholder() -> some View {
-        
-        ProgressView()
-            .frame(maxWidth: .infinity)
-            .frame(height: PROFILE_HEIGHT)
-    }
-    
-    @ViewBuilder
-    private func showCredits() -> some View {
-        
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 16) {
-                ForEach(persons, id: \.id) { person in
+                ForEach(people, id: \.id) { person in
                     NavigationLink(value: Target(id: person.id)) {
-                        ProfileView(person, model.image(for:))
+                        ProfileView(person, imageResolver)
                             .frame(width: PROFILE_WIDTH, height: PROFILE_HEIGHT)
                             .clipShape(.rect(cornerRadius: 10.0))
-                            .matchedTransitionSource(id: person.id, in: profileNamespace)
+                            .matchedTransitionSource(id: person.id, in: namespace)
                     }
                     .buttonStyle(.plain)
                 }
             }
             .scrollTargetLayout()
-            .navigationDestination(for: Target.self) { target in
-                PersonDetailsScreen(model.makePersonDetailsViewModel(for: target.id), profileNamespace)
-            }
         }
         .scrollTargetBehavior(.viewAligned)
-    }
-    
-    var persons: [any Person] {
-        switch creditsType {
-        case .cast:
-            return model.cast
-            
-        case .crew:
-            return model.crew
-        }
     }
 }
 
@@ -149,6 +110,25 @@ private struct ProfileView: View {
 
 
 #Preview {
-    CreditsView<CastMemberDetailsTarget>(CreditsViewModel(550, MockMovieRepository(), MockImageRepository()), .cast)
-        .preferredColorScheme(.dark)
+    @State @Previewable var detailsModel = MovieDetailsViewModel(550, MockMovieRepository(), MockImageRepository())
+
+    Group {
+        if let details = detailsModel.details {
+            PreviewWrapper(details) { model, namespace in
+                CreditsView<CastMemberDetailsTarget>(
+                    detailsModel.cast,
+                    { (person: any Person) in
+                        return detailsModel.image(for: person)
+                    },
+                    namespace
+                )
+            }
+        } else {
+            ProgressView()
+        }
+    }
+    .preferredColorScheme(.dark)
+    .task {
+        await detailsModel.fetchDetails()
+    }
 }

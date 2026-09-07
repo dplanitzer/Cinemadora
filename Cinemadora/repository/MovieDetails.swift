@@ -35,6 +35,7 @@ nonisolated struct MovieDetails : Decodable, Identifiable, Equatable, Hashable {
     let isVideo: Bool?
     let voteAverage: Double?
     let voteCount: Int?
+    let credits: Credits
     
     enum CodingKeys : String, CodingKey {
         case adult
@@ -63,6 +64,7 @@ nonisolated struct MovieDetails : Decodable, Identifiable, Equatable, Hashable {
         case isVideo = "video"
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
+        case credits
     }
 }
 

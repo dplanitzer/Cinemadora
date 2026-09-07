@@ -60,9 +60,4 @@ final class MovieViewModel : Identifiable {
         
         return MovieDetailsViewModel(movie.id, movieRep, imageRep)
     }
-    
-    func makeCreditsViewModel() -> CreditsViewModel {
-        
-        return CreditsViewModel(movie.id, movieRep, imageRep)
-    }
 }

@@ -83,7 +83,9 @@ private struct MovieInfoView: View {
     
     @State private var model: MovieViewModel
     @State private var details: MovieDetailsViewModel
-    @State private var credits: CreditsViewModel
+
+    @Namespace private var castNamespace
+    @Namespace private var crewNamespace
 
     private let onTapReview: (Review) -> Void
 
@@ -93,7 +95,6 @@ private struct MovieInfoView: View {
         self.onTapReview = onTapReview
         
         self.details = model.makeDetailsViewModel()
-        self.credits = model.makeCreditsViewModel()
     }
     
     var body: some View {
@@ -123,7 +124,7 @@ private struct MovieInfoView: View {
             }
 
             
-            if let director = credits.director {
+            if let director = details.director {
                 HStack(spacing: 8) {
                     Text("Director")
                         .font(.footnote)
@@ -146,7 +147,13 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                CreditsView<CastMemberDetailsTarget>(credits, .cast)
+                CreditsView<CastMemberDetailsTarget>(
+                    details.cast,
+                    { (person: any Person) in
+                        return details.image(for: person)
+                    },
+                    castNamespace
+                )
             }
             
             
@@ -155,7 +162,13 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                CreditsView<CrewMemberDetailsTarget>(credits, .crew)
+                CreditsView<CrewMemberDetailsTarget>(
+                    details.crew,
+                    { (person: any Person) in
+                        return details.image(for: person)
+                    },
+                    crewNamespace
+                )
             }
             
             
@@ -205,6 +218,12 @@ private struct MovieInfoView: View {
             }
         }
         .padding(.horizontal, 10)
+        .navigationDestination(for: CastMemberDetailsTarget.self) { target in
+            PersonDetailsScreen(details.makePersonDetailsViewModel(for: target.id), castNamespace)
+        }
+        .navigationDestination(for: CrewMemberDetailsTarget.self) { target in
+            PersonDetailsScreen(details.makePersonDetailsViewModel(for: target.id), crewNamespace)
+        }
         .task {
             await model.fetchGenres()
             await details.fetchDetails()

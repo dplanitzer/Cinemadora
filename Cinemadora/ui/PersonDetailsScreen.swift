@@ -14,11 +14,13 @@ struct PersonDetailsScreen: View {
 
     
     init(_ model: PersonDetailsViewModel, _ namespace: Namespace.ID) {
+        
         self.model = model
         self.namespace = namespace
     }
     
     var body: some View {
+        
         GeometryReader { geometry in
             ZStack(alignment: .top) {
                 AsyncImageView(model.profileImage) { state in

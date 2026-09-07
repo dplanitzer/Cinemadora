@@ -32,7 +32,7 @@ actor TMDBMovieRepository : MovieRepository {
     
     func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails {
         
-        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)?language=\(languageRegion)", type: MovieDetails.self)
+        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)?language=\(languageRegion)&append_to_response=credits", type: MovieDetails.self)
     }
     
     func fetchReviewsListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Review> {

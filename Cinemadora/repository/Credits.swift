@@ -9,7 +9,7 @@ import Foundation
 
 nonisolated struct Credits : Decodable, Identifiable, Equatable, Hashable {
     
-    let id: Int
+    let id: Int?                // Not provided when using append_to_response
     let cast: [CastMember]
     let crew: [CrewMember]
 }
