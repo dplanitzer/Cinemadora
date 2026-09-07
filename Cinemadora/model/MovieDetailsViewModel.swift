@@ -47,6 +47,8 @@ final class MovieDetailsViewModel {
 
     
     // Studios
+    private(set) var productionCompanies: [CompanySummary] = []
+    
     func image(for company: CompanySummary) -> ImageLocator {
         
         return ImageLocator(imageRep, company.logoPath, .logo)
@@ -72,6 +74,10 @@ final class MovieDetailsViewModel {
                 // e.g. they played multiple roles
                 cast = uniquePeople(credits.cast)
                 crew = uniquePeople(credits.crew)
+            }
+            
+            if let companies = details?.productionCompanies {
+                productionCompanies = companies
             }
 
             

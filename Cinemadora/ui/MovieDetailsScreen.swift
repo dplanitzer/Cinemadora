@@ -191,13 +191,13 @@ private struct MovieInfoView: View {
             }
             
 
-            if let companies = details.details?.productionCompanies, !companies.isEmpty {
+            if !details.productionCompanies.isEmpty {
                 VStack(alignment: .leading) {
                     Text("Studio")
                         .font(.headline)
                         .bold()
                     
-                    StudioListView(companies, details.image(for:))
+                    StudioListView(details.productionCompanies, details.image(for:))
                 }
             }
 
