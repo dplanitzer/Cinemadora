@@ -84,6 +84,7 @@
 				ui/view/ReviewOverlayView.swift,
 				ui/view/ReviewView.swift,
 				ui/view/RuntimeView.swift,
+				utils/LRUCache.swift,
 			);
 			target = 5554A71D30117B5A001C8C5D /* CinemadoraTests */;
 		};
@@ -134,6 +135,7 @@
 				ui/view/ReviewOverlayView.swift,
 				ui/view/ReviewView.swift,
 				ui/view/RuntimeView.swift,
+				utils/LRUCache.swift,
 			);
 			target = 5554A72730117B5A001C8C5D /* CinemadoraUITests */;
 		};

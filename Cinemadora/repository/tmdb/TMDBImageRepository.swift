@@ -10,7 +10,7 @@ import UIKit
 final class TMDBImageRepository : ImageRepository {
     
     private let service: TMDBService
-    private let imageCache: ImageCache = ImageCache()
+    private let imageCache: LRUCache<CacheKey, UIImage> = LRUCache()
     private let configurationCache: ConfigurationCache
     
     
@@ -89,134 +89,38 @@ final class TMDBImageRepository : ImageRepository {
             throw URLError(.badURL)
         }
     }
-}
-
-
-private nonisolated struct CacheKey : Hashable {
-    let basePath: String
-    let usage: ImageUsage
-    let size: ImageSizeClass
     
-    init(_ basePath: String, _ usage: ImageUsage, _ size: ImageSizeClass) {
-        self.basePath = basePath
-        self.usage = usage
-        self.size = size
-    }
-}
-
-
-private nonisolated final class CacheNode {
     
-    let key: CacheKey
-    var image: UIImage
-    var previous: CacheNode?
-    var next: CacheNode?
-    
-    init(_ key: CacheKey, _ image: UIImage) {
-        self.key = key
-        self.image = image
-    }
-}
-
-
-private actor ImageCache {
-    
-    private let capacity: Int
-    private var cache: [CacheKey: CacheNode] = [:]
-    
-    private var newest: CacheNode?
-    private var oldest: CacheNode?
-    
-
-    init(capacity: Int = 40) {
-        self.capacity = capacity
-    }
-    
-    func image(for key: CacheKey) -> UIImage? {
-        guard let node = cache[key] else { return nil }
+    private nonisolated struct CacheKey : Hashable {
+        let basePath: String
+        let usage: ImageUsage
+        let size: ImageSizeClass
         
-        // Move accessed node to the head (most recent)
-        moveToHead(node)
-        return node.image
+        init(_ basePath: String, _ usage: ImageUsage, _ size: ImageSizeClass) {
+            self.basePath = basePath
+            self.usage = usage
+            self.size = size
+        }
     }
-    
-    func insert(_ image: UIImage, for key: CacheKey) {
-        if let existingNode = cache[key] {
-            // Update existing cache node
-            existingNode.image = image
-            moveToHead(existingNode)
-        } else {
-            // Create a new cache node
-            let newNode = CacheNode(key, image)
-            cache[key] = newNode
-            addToHead(newNode)
-                
-            // Evict oldest if over capacity
-            if cache.count > capacity {
-                evictOldest()
+
+
+    private actor ConfigurationCache {
+        
+        private let service: TMDBService
+        private var cachedConfiguration: TMDBConfiguration?
+        
+        
+        init(_ service: TMDBService) {
+            self.service = service
+        }
+        
+        func withConfiguration<T>(_ closure: (_ configuration: TMDBConfiguration) async throws -> T) async throws -> T {
+            
+            if cachedConfiguration == nil {
+                cachedConfiguration = try await service.fetch(from: "https://api.themoviedb.org/3/configuration", type: TMDBConfiguration.self)
             }
+            
+            return try await closure(cachedConfiguration!)
         }
-    }
-    
-
-    private func addToHead(_ node: CacheNode) {
-        node.next = newest
-        node.previous = nil
-        
-        if let currentHead = newest {
-            currentHead.previous = node
-        }
-        newest = node
-        
-        if oldest == nil {
-            oldest = node
-        }
-    }
-    
-    private func removeNode(_ node: CacheNode) {
-        if let prev = node.previous {
-            prev.next = node.next
-        } else {
-            newest = node.next
-        }
-        
-        if let next = node.next {
-            next.previous = node.previous
-        } else {
-            oldest = node.previous
-        }
-    }
-    
-    private func moveToHead(_ node: CacheNode) {
-        removeNode(node)
-        addToHead(node)
-    }
-    
-    private func evictOldest() {
-        guard let oldestNode = oldest else { return }
-        
-        removeNode(oldestNode)
-        cache.removeValue(forKey: oldestNode.key)
-    }
-}
-
-
-private actor ConfigurationCache {
-    
-    private let service: TMDBService
-    private var cachedConfiguration: TMDBConfiguration?
-    
-    
-    init(_ service: TMDBService) {
-        self.service = service
-    }
-    
-    func withConfiguration<T>(_ closure: (_ configuration: TMDBConfiguration) async throws -> T) async throws -> T {
-        
-        if cachedConfiguration == nil {
-            cachedConfiguration = try await service.fetch(from: "https://api.themoviedb.org/3/configuration", type: TMDBConfiguration.self)
-        }
-        
-        return try await closure(cachedConfiguration!)
     }
 }
