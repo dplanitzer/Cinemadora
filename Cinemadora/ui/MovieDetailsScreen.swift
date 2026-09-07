@@ -81,6 +81,8 @@ struct MovieDetailsScreen: View {
 
 private struct MovieInfoView: View {
     
+    private let REVIEW_HEIGHT = 120.0
+
     @State private var model: MovieViewModel
     @State private var details: MovieDetailsViewModel
 
@@ -187,7 +189,19 @@ private struct MovieInfoView: View {
                     .font(.headline)
                     .bold()
                 
-                ReviewListView(details.reviewsFeed, onTapReview)
+                LazyCarousel(
+                    feed: details.reviewsFeed,
+                    content: { review in
+                        ReviewView(review) {
+                                self.onTapReview(review)
+                            }
+                            .frame(height: REVIEW_HEIGHT)
+                    },
+                    placeholder: {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, minHeight: REVIEW_HEIGHT)
+                    }
+                )
             }
             
 
