@@ -13,11 +13,28 @@ enum ListName {
     case topRated
 }
 
-protocol MovieRepository {
+actor MovieRepository {
     
-    func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie>
-    
-    func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails
+    private let dataSource: DataSource
 
-    func fetchSimilarMoviesListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie>
+    
+    init(_ dataSource: DataSource) {
+        
+        self.dataSource = dataSource
+    }
+    
+    func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
+        
+        return try await dataSource.fetchMovieListPage(for: list, pageNum)
+    }
+    
+    func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails {
+        
+        return try await dataSource.fetchMovieDetails(for: movieId)
+    }
+    
+    func fetchSimilarMoviesListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie> {
+
+        return try await dataSource.fetchSimilarMoviesListPage(for: movieId, pageNum)
+    }
 }

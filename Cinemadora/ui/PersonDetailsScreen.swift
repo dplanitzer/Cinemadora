@@ -86,9 +86,11 @@ private struct PersonInfoView: View {
             Text(details.name)
                 .font(.title)
                 .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
                     
             Text(details.biography)
                 .font(.body)
+                .frame(maxWidth: .infinity, alignment: .leading) 
         }
         .padding(.horizontal, 10)
     }

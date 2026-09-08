@@ -7,7 +7,18 @@
 
 import Foundation
 
-protocol CompanyRepository {
+actor CompanyRepository {
     
-    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails
+    private let dataSource: DataSource
+
+    
+    init(_ dataSource: DataSource) {
+        
+        self.dataSource = dataSource
+    }
+    
+    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails {
+        
+        return try await dataSource.fetchCompanyDetails(for: companyId)
+    }
 }

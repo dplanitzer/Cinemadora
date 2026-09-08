@@ -7,7 +7,18 @@
 
 import Foundation
 
-protocol PersonRepository {
+actor PersonRepository {
     
-    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails
+    private let dataSource: DataSource
+    
+    
+    init(_ dataSource: DataSource) {
+        
+        self.dataSource = dataSource
+    }
+    
+    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails {
+
+        return try await dataSource.fetchPersonDetails(for: personId)
+    }
 }
