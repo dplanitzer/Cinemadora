@@ -56,7 +56,7 @@ struct LogoView: View {
     @State @Previewable var movieDetails: MovieDetails? = nil
     let appContainer = AppContainer.mocked()
 
-    Group {
+    VStack {
         if let details = movieDetails {
             LogoView(
                 details.productionCompanies.first!,
@@ -79,7 +79,7 @@ struct LogoView: View {
     @State @Previewable var movieDetails: MovieDetails? = nil
     let appContainer = AppContainer.mocked()
 
-    Group {
+    VStack {
         if let details = movieDetails {
             LogoView(
                 details.productionCompanies.first!,

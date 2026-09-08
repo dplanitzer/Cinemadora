@@ -9,18 +9,20 @@ import SwiftUI
 
 struct MovieDetailsScreen: View {
     
-    private let model: MovieViewModel
+    private let model: MovieDetailsViewModel
     private var namespace: Namespace.ID
 
     @State private var selectedReview: Review? = nil
 
     
-    init(_ model: MovieViewModel, _ namespace: Namespace.ID) {
+    init(_ model: MovieDetailsViewModel, _ namespace: Namespace.ID) {
+        
         self.model = model
         self.namespace = namespace
     }
     
     var body: some View {
+        
         GeometryReader { geometry in
             ZStack(alignment: .top) {
                 AsyncImageView(model.posterImage) { state in
@@ -73,7 +75,7 @@ struct MovieDetailsScreen: View {
                 }
 
             }
-            .navigationTransition(.zoom(sourceID: model.id, in: namespace))
+            .navigationTransition(.zoom(sourceID: model.movie.id, in: namespace))
         }
     }
 }
@@ -83,8 +85,7 @@ private struct MovieInfoView: View {
     
     private let REVIEW_HEIGHT = 120.0
 
-    @State private var model: MovieViewModel
-    @State private var details: MovieDetailsViewModel
+    @State private var model: MovieDetailsViewModel
 
     @Namespace private var castNamespace
     @Namespace private var crewNamespace
@@ -92,11 +93,10 @@ private struct MovieInfoView: View {
     private let onTapReview: (Review) -> Void
 
     
-    init(_ model: MovieViewModel, onTapReview: @escaping (Review) -> Void) {
+    init(_ model: MovieDetailsViewModel, onTapReview: @escaping (Review) -> Void) {
+        
         self.model = model
         self.onTapReview = onTapReview
-        
-        self.details = model.makeDetailsViewModel()
     }
     
     var body: some View {
@@ -133,13 +133,13 @@ private struct MovieInfoView: View {
                 ReleaseYearView(model.releaseYear)
 
                 
-                if let runtime = details.details?.runtime {
+                if let runtime = model.details?.runtime {
                     RuntimeView(runtime)
                 }
             }
 
             
-            if let director = details.director {
+            if let director = model.director {
                 HStack(spacing: 8) {
                     Text("Director")
                         .font(.footnote)
@@ -163,11 +163,11 @@ private struct MovieInfoView: View {
                     .bold()
                 
                 Carousel(
-                    items: details.cast,
+                    items: model.cast,
                     spacing: 16.0,
                     content: { (member: CastMember) in
                         NavigationLink(value: CastMemberDetailsTarget(id: member.id)) {
-                            ProfileView(member, details.image(for:))
+                            ProfileView(member, model.image(for:))
                                 .matchedTransitionSource(id: member.id, in: castNamespace)
                         }
                         .buttonStyle(.plain)
@@ -183,11 +183,11 @@ private struct MovieInfoView: View {
                     .bold()
 
                 Carousel(
-                    items: details.crew,
+                    items: model.crew,
                     spacing: 16.0,
                     content: { (member: CrewMember) in
                         NavigationLink(value: CrewMemberDetailsTarget(id: member.id)) {
-                            ProfileView(member, details.image(for:))
+                            ProfileView(member, model.image(for:))
                                 .matchedTransitionSource(id: member.id, in: crewNamespace)
                         }
                         .buttonStyle(.plain)
@@ -203,7 +203,7 @@ private struct MovieInfoView: View {
                     .bold()
                 
                 LazyCarousel(
-                    feed: details.reviewsFeed,
+                    feed: model.reviewsFeed,
                     content: { review in
                         ReviewView(review) {
                                 self.onTapReview(review)
@@ -218,17 +218,17 @@ private struct MovieInfoView: View {
             }
             
 
-            if !details.productionCompanies.isEmpty {
+            if !model.productionCompanies.isEmpty {
                 VStack(alignment: .leading) {
                     Text("Studio")
                         .font(.headline)
                         .bold()
                     
                     Carousel(
-                        items: details.productionCompanies,
+                        items: model.productionCompanies,
                         spacing: 16.0,
                         content: { company in
-                            LogoView(company, details.image(for:))
+                            LogoView(company, model.image(for:))
                         }
                     )
                     .fixedSize(horizontal: false, vertical: true)
@@ -236,9 +236,9 @@ private struct MovieInfoView: View {
             }
 
             
-            if details.details?.budget != nil || details.details?.revenue != nil {
+            if model.details?.budget != nil || model.details?.revenue != nil {
                 HStack(spacing: 16) {
-                    if let budget = details.details?.budget {
+                    if let budget = model.details?.budget {
                         HStack(spacing: 8) {
                             Text("Budget")
                                 .font(.footnote)
@@ -249,7 +249,7 @@ private struct MovieInfoView: View {
                     }
                     
                     
-                    if let revenue = details.details?.revenue {
+                    if let revenue = model.details?.revenue {
                         HStack(spacing: 8) {
                             Text("Revenue")
                                 .font(.footnote)
@@ -263,26 +263,24 @@ private struct MovieInfoView: View {
         }
         .padding(.horizontal, 10)
         .navigationDestination(for: CastMemberDetailsTarget.self) { target in
-            PersonDetailsScreen(details.makePersonDetailsViewModel(for: target.id), castNamespace)
+            PersonDetailsScreen(model.makePersonDetailsViewModel(for: target.id), castNamespace)
         }
         .navigationDestination(for: CrewMemberDetailsTarget.self) { target in
-            PersonDetailsScreen(details.makePersonDetailsViewModel(for: target.id), crewNamespace)
+            PersonDetailsScreen(model.makePersonDetailsViewModel(for: target.id), crewNamespace)
         }
         .task {
-            await model.fetchGenres()
-            await details.fetchDetails()
+            await model.fetchDetails()
         }
     }
 }
 
 
 #Preview {
-    @State @Previewable var movieState: Movie? = nil
-    let appContainer = AppContainer.mocked()
+    @State @Previewable var mvm = MoviesViewModel(.popular, AppContainer.mocked())
 
-    Group {
-        if let movie = movieState {
-            PreviewWrapper(MovieViewModel(movie, appContainer)) { model, namespace in
+    VStack {
+        if let movie = mvm.moviesFeed.items.first {
+            PreviewWrapper(mvm.makeDetailsViewModel(for: movie)) { model, namespace in
                 MovieDetailsScreen(model, namespace)
             }
         } else {
@@ -291,6 +289,10 @@ private struct MovieInfoView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        movieState = try! await appContainer.movieRepository.fetchMovieListPage(for: .popular, 1).results.first!
+        await mvm.moviesFeed.fetchMore()
+        
+        if let movie = mvm.moviesFeed.items.first {
+            await mvm.fetchGenres(for: movie)
+        }
     }
 }

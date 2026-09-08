@@ -12,10 +12,7 @@ struct CinemadoraApp: App {
     
     var body: some Scene {
         WindowGroup {
-            let appContainer = AppContainer.production()
-            let popularMoviesModel = MovieListViewModel(.popular, appContainer)
-            
-            MovieListScreen(popularMoviesModel)
+            MovieListScreen(MoviesViewModel(.popular, AppContainer.production()))
                 .preferredColorScheme(.dark)
         }
     }

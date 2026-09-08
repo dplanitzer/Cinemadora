@@ -102,21 +102,21 @@ struct MovieCardView: View {
 
 
 #Preview {
-    @State @Previewable var movieModel: MovieViewModel? = nil
-    let appContainer = AppContainer.mocked()
+    @State @Previewable var mvm = MoviesViewModel(.popular, AppContainer.mocked())
 
-    Group {
-        if let model = movieModel {
-            MovieCardView(movie: model.movie, genres: model.genres, posterImage: model.posterImage)
+    VStack {
+        if let movie = mvm.moviesFeed.items.first {
+            MovieCardView(movie: movie, genres: mvm.genres(for: movie), posterImage: mvm.posterImage(for: movie))
         } else {
             ProgressView()
         }
     }
     .preferredColorScheme(.dark)
     .task {
-        let movie = try! await appContainer.movieRepository.fetchMovieListPage(for: .popular, 1).results.first!
+        await mvm.moviesFeed.fetchMore()
         
-        movieModel =  MovieViewModel(movie, appContainer)
-        await movieModel?.fetchGenres()
+        if let movie = mvm.moviesFeed.items.first {
+            await mvm.fetchGenres(for: movie)
+        }
     }
 }

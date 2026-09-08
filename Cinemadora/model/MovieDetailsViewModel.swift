@@ -11,16 +11,32 @@ import Foundation
 final class MovieDetailsViewModel {
     
     private let appContainer: AppContainer
-    private let movieId: Int
     
     
-    init(_ movieId: Int, _ appContainer: AppContainer) {
+    init(_ movie: Movie, _ genres: [Genre], _ posterImage: ImageLocator, _ appContainer: AppContainer) {
 
-        self.movieId = movieId
+        self.movie = movie
+        self.genres = genres
+        self.posterImage = posterImage
         self.appContainer = appContainer
-        self.reviewsFeed = appContainer.reviewRepository.reviewsFeed(for: movieId)
+        self.reviewsFeed = appContainer.reviewRepository.reviewsFeed(for: movie.id)
     }
     
+
+    // Basic movie information (synchronously available)
+    let movie: Movie
+    
+    // Movie genres (synchronously available)
+    let genres: [Genre]
+    
+    // Movie poster image (synchronously available)
+    let posterImage: ImageLocator
+    
+    var releaseYear: String {
+
+        return String(movie.releaseDate?.split(separator: "-").first ?? "????")
+    }
+
     
     // General movie details
     private(set) var details: MovieDetails?
@@ -63,7 +79,7 @@ final class MovieDetailsViewModel {
         guard details == nil else { return }
         
         do {
-            details = try await appContainer.movieRepository.fetchMovieDetails(for: movieId)
+            details = try await appContainer.movieRepository.fetchMovieDetails(for: movie.id)
             
             if let credits = details?.credits {
                 director = credits.crew.first(where: { $0.job == "Director" })

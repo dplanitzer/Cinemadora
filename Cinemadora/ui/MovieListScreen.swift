@@ -9,11 +9,11 @@ import SwiftUI
 
 struct MovieListScreen: View {
     
-    @State private var model: MovieListViewModel
+    @State private var model: MoviesViewModel
     @Namespace private var movieNamespace
     
     
-    init(_ model: MovieListViewModel) {
+    init(_ model: MoviesViewModel) {
         self.model = model
     }
     
@@ -21,7 +21,7 @@ struct MovieListScreen: View {
         
         NavigationStack {
             
-            if model.movieViewModels.isEmpty {
+            if model.moviesFeed.items.isEmpty {
                 showMovieListPlaceholder()
             }
             else {
@@ -29,24 +29,24 @@ struct MovieListScreen: View {
             }
         }
         .task {
-            await model.fetchMore()
+            await model.moviesFeed.fetchMore()
         }
     }
 
     @ViewBuilder
     private func showMovieListPlaceholder() -> some View {
         
-        if model.isLoading {
+        if model.moviesFeed.isLoading {
             ProgressView {
                 Text("Loading...")
             }
         }
-        else if !model.errorDescription.isEmpty {
-            Text("Error: \(model.errorDescription)")
+        else if !model.moviesFeed.errorDescription.isEmpty {
+            Text("Error: \(model.moviesFeed.errorDescription)")
                 .foregroundStyle(.red)
                 .multilineTextAlignment(.center)
         }
-        else if !model.hasMore {
+        else if !model.moviesFeed.hasMore {
             Text("No movies")
                 .multilineTextAlignment(.center)
         }
@@ -55,12 +55,14 @@ struct MovieListScreen: View {
     @ViewBuilder
     private func showMovieList() -> some View {
         
+        let moviesFeed = model.moviesFeed
+        
         VStack(spacing: 20) {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 16) {
-                    ForEach(model.movieViewModels) { (movieViewModel: MovieViewModel) in
-                        NavigationLink(value: MovieDetailsTarget(id: movieViewModel.id)) {
-                            MovieCardView(movie: movieViewModel.movie, genres: movieViewModel.genres, posterImage: movieViewModel.posterImage)
+                    ForEach(moviesFeed.items) { (movie: Movie) in
+                        NavigationLink(value: MovieDetailsTarget(id: movie.id)) {
+                            MovieCardView(movie: movie, genres: model.genres(for: movie), posterImage: model.posterImage(for: movie))
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                                 .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                                     content
@@ -68,20 +70,20 @@ struct MovieListScreen: View {
                                         .opacity(phase.isIdentity ? 1.0 : 0.6)
                                 }
                                 .task {
-                                    await movieViewModel.fetchGenres()
+                                    await model.fetchGenres(for: movie)
                                 }
                                 .onAppear {
-                                    if movieViewModel.id == model.movieViewModels.last?.id {
+                                    if movie.id == moviesFeed.items.last?.id {
                                         Task {
-                                            await model.fetchMore()
+                                            await moviesFeed.fetchMore()
                                         }
                                     }
                                 }
-                                .matchedTransitionSource(id: movieViewModel.id, in: movieNamespace)
+                                .matchedTransitionSource(id: movie.id, in: movieNamespace)
                         }
                         .buttonStyle(.plain)
                         
-                        if model.isLoading {
+                        if moviesFeed.isLoading {
                             ProgressView()
                                 .frame(maxWidth: .infinity)
                                 .padding()
@@ -102,15 +104,13 @@ struct MovieListScreen: View {
             }
         }
         .navigationDestination(for: MovieDetailsTarget.self) { target in
-            MovieDetailsScreen(model.movieViewModel(for: target.id)!, movieNamespace)
+            MovieDetailsScreen(model.makeDetailsViewModel(for: model.moviesFeed.movie(for: target.id)!), movieNamespace)
         }
     }
 }
 
 
 #Preview {
-    let appContainer = AppContainer.mocked()
-    
-    MovieListScreen(MovieListViewModel(.popular, appContainer))
+    MovieListScreen(MoviesViewModel(.popular, AppContainer.mocked()))
         .preferredColorScheme(.dark)
 }

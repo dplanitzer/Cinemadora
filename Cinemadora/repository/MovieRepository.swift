@@ -23,6 +23,12 @@ actor MovieRepository {
         self.dataSource = dataSource
     }
     
+    @MainActor
+    func moviesFeed(for listName: ListName) -> MoviesFeed {
+        return MoviesFeed(dataSource, listName)
+    }
+
+    
     func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
         
         return try await dataSource.fetchMovieListPage(for: list, pageNum)

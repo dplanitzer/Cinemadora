@@ -98,9 +98,7 @@ private struct PersonInfoView: View {
 
 
 #Preview {
-    let appContainer = AppContainer.mocked()
-    
-    PreviewWrapper(PersonDetailsViewModel(31, appContainer)) { model, namespace in
+    PreviewWrapper(PersonDetailsViewModel(31, AppContainer.mocked())) { model, namespace in
         PersonDetailsScreen(model, namespace)
     }
 }

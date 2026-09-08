@@ -1,37 +1,37 @@
 //
-//  MovieListViewModel.swift
+//  MoviesFeed.swift
 //  Cinemadora
 //
-//  Created by Dietmar Planitzer on 7/22/26.
+//  Created by Dietmar Planitzer on 9/8/26.
 //
 
 import Foundation
 
 @Observable
-final class MovieListViewModel {
+final class MoviesFeed : Feed {
     
-    private let appContainer: AppContainer
+    private let dataSource: DataSource
 
     private let listName: ListName
     private var nextPage = 0
     private var pageCount = 1
 
     
-    init(_ listName: ListName, _ appContainer: AppContainer) {
-        
+    init(_ dataSource: DataSource, _ listName: ListName) {
+
+        self.dataSource = dataSource
         self.listName = listName
-        self.appContainer = appContainer
     }
 
     private(set) var errorDescription = ""
 
-    private(set) var movieViewModels: [MovieViewModel] = []
+    private(set) var items: [Movie] = []
     
-    func movieViewModel(for id: Int) -> MovieViewModel? {
+    func movie(for id: Int) -> Movie? {
         
-        for mvm in movieViewModels {
-            if mvm.id == id {
-                return mvm
+        for mv in items {
+            if mv.id == id {
+                return mv
             }
         }
         return nil
@@ -52,10 +52,10 @@ final class MovieListViewModel {
         errorDescription = ""
         
         do {
-            let r = try await appContainer.movieRepository.fetchMovieListPage(for: listName, nextPage)
+            let r = try await dataSource.fetchMovieListPage(for: listName, nextPage)
             
             for movie in r.results {
-                movieViewModels.append(MovieViewModel(movie, appContainer))
+                items.append(movie)
             }
             pageCount = r.totalPageCount
             nextPage += 1

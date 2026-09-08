@@ -48,7 +48,7 @@ struct ReviewView: View {
     @State @Previewable var reviewState: Review? = nil
     let appContainer = AppContainer.mocked()
 
-    Group {
+    VStack {
         if let review = reviewState {
             ReviewView(review)
         } else {

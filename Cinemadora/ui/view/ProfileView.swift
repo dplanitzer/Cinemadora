@@ -77,18 +77,37 @@ struct ProfileView: View {
 }
 
 
-#Preview {
-    @State @Previewable var model = MovieDetailsViewModel(550, AppContainer.mocked())
 
-    Group {
-        if let person = model.cast.first {
-            ProfileView(person, model.image(for:))
+#Preview {
+    @State @Previewable var mvm = MoviesViewModel(.popular, AppContainer.mocked())
+    @State @Previewable var dvm: MovieDetailsViewModel? = nil
+    
+    VStack {
+        if mvm.moviesFeed.items.first != nil {
+            if let dvm = dvm {
+                if let person = dvm.cast.first {
+                    ProfileView(person, dvm.image(for:))
+                } else {
+                    Text("No person")
+                }
+            } else {
+                ProgressView("Loading movie details...")
+            }
         } else {
-            ProgressView()
+            ProgressView("Fetching movies feed...")
         }
     }
     .preferredColorScheme(.dark)
     .task {
-        await model.fetchDetails()
+        await mvm.moviesFeed.fetchMore()
+        
+        if let movie = mvm.moviesFeed.items.first {
+            let loadedDvm = mvm.makeDetailsViewModel(for: movie)
+            
+            await loadedDvm.fetchDetails()
+            dvm = loadedDvm
+        }
     }
 }
+
+
