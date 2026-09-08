@@ -109,7 +109,7 @@ private struct MovieInfoView: View {
                     
             
             Carousel(
-                items: model.genres,
+                items: model.genresFeed.items,
                 spacing: 8.0,
                 content: { genre in
                     GenreView(genre)
@@ -270,6 +270,7 @@ private struct MovieInfoView: View {
         }
         .task {
             await model.fetchDetails()
+            await model.genresFeed.fetchMore()
         }
     }
 }
@@ -292,7 +293,7 @@ private struct MovieInfoView: View {
         await mvm.moviesFeed.fetchMore()
         
         if let movie = mvm.moviesFeed.items.first {
-            await mvm.fetchGenres(for: movie)
+            await mvm.genresFeed(for: movie).fetchMore()
         }
     }
 }

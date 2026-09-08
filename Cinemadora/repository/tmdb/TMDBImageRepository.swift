@@ -23,7 +23,7 @@ final class TMDBImageRepository : ImageRepository {
         
         let key = CacheKey(basePath, usage, size)
         
-        if let image = await imageCache.image(for: key) {
+        if let image = await imageCache.value(for: key) {
             return image
         }
 

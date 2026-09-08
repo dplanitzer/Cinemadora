@@ -7,16 +7,31 @@
 
 import Foundation
 
-actor GenreRepository {
+final class GenreRepository {
     
     private let dataSource: DataSource
     private var genres: Dictionary<Int, Genre> = [:]
+    private var genresFeeds: Dictionary<Int, GenresFeed> = [:]
 
     
     init(_ dataSource: DataSource) {
         
         self.dataSource = dataSource
     }
+    
+    @MainActor
+    func genresFeed(for movie: Movie) -> GenresFeed {
+        
+        if let feed = genresFeeds[movie.id] {
+            return feed
+        } else {
+            let feed = GenresFeed(movie.genreIds, self)
+            
+            genresFeeds[movie.id] = feed
+            return feed
+        }
+    }
+
     
     func genre(for id: Int) async throws -> Genre? {
 

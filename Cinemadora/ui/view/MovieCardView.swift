@@ -106,7 +106,11 @@ struct MovieCardView: View {
 
     VStack {
         if let movie = mvm.moviesFeed.items.first {
-            MovieCardView(movie: movie, genres: mvm.genres(for: movie), posterImage: mvm.posterImage(for: movie))
+            MovieCardView(
+                movie: movie,
+                genres: mvm.genresFeed(for: movie).items,
+                posterImage: mvm.posterImage(for: movie)
+            )
         } else {
             ProgressView()
         }
@@ -116,7 +120,7 @@ struct MovieCardView: View {
         await mvm.moviesFeed.fetchMore()
         
         if let movie = mvm.moviesFeed.items.first {
-            await mvm.fetchGenres(for: movie)
+            await mvm.genresFeed(for: movie).fetchMore()
         }
     }
 }

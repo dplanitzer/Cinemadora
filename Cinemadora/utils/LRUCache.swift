@@ -34,7 +34,7 @@ actor LRUCache<Key, Value> where Key: Hashable {
         self.capacity = capacity
     }
     
-    func image(for key: Key) -> Value? {
+    func value(for key: Key) -> Value? {
         guard let node = cache[key] else { return nil }
         
         // Move accessed node to the head (most recent)

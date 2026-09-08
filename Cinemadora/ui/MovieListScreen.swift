@@ -62,7 +62,11 @@ struct MovieListScreen: View {
                 LazyHStack(spacing: 16) {
                     ForEach(moviesFeed.items) { (movie: Movie) in
                         NavigationLink(value: MovieDetailsTarget(id: movie.id)) {
-                            MovieCardView(movie: movie, genres: model.genres(for: movie), posterImage: model.posterImage(for: movie))
+                            MovieCardView(
+                                movie: movie,
+                                genres: model.genresFeed(for: movie).items,
+                                posterImage: model.posterImage(for: movie)
+                            )
                                 .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                                 .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                                     content
@@ -70,7 +74,7 @@ struct MovieListScreen: View {
                                         .opacity(phase.isIdentity ? 1.0 : 0.6)
                                 }
                                 .task {
-                                    await model.fetchGenres(for: movie)
+                                    await model.genresFeed(for: movie).fetchMore()
                                 }
                                 .onAppear {
                                     if movie.id == moviesFeed.items.last?.id {

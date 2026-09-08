@@ -13,12 +13,12 @@ final class MovieDetailsViewModel {
     private let appContainer: AppContainer
     
     
-    init(_ movie: Movie, _ genres: [Genre], _ posterImage: ImageLocator, _ appContainer: AppContainer) {
+    init(_ movie: Movie, _ posterImage: ImageLocator, _ appContainer: AppContainer) {
 
         self.movie = movie
-        self.genres = genres
         self.posterImage = posterImage
         self.appContainer = appContainer
+        self.genresFeed = appContainer.genreRepository.genresFeed(for: movie)
         self.reviewsFeed = appContainer.reviewRepository.reviewsFeed(for: movie.id)
     }
     
@@ -26,11 +26,10 @@ final class MovieDetailsViewModel {
     // Basic movie information (synchronously available)
     let movie: Movie
     
-    // Movie genres (synchronously available)
-    let genres: [Genre]
-    
     // Movie poster image (synchronously available)
     let posterImage: ImageLocator
+
+    let genresFeed: GenresFeed
     
     var releaseYear: String {
 
