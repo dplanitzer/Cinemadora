@@ -18,7 +18,7 @@ final class MovieDetailsViewModel {
 
         self.movieId = movieId
         self.appContainer = appContainer
-        self.reviewsFeed = appContainer.movieRepository.reviewsFeed(for: movieId)
+        self.reviewsFeed = appContainer.reviewRepository.reviewsFeed(for: movieId)
     }
     
     

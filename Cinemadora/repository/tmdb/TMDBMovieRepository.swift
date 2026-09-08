@@ -9,12 +9,11 @@ import Foundation
 
 actor TMDBMovieRepository : MovieRepository {
     
-    private let service: TMDBService
-    private var genres: Dictionary<Int, Genre> = [:]
+    private let dataSource: TMDBDataSource
 
     
-    init(_ service: TMDBService) {
-        self.service = service
+    init(_ dataSource: TMDBDataSource) {
+        self.dataSource = dataSource
     }
     
     func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
@@ -27,52 +26,19 @@ actor TMDBMovieRepository : MovieRepository {
         case .topRated: listName = "top_rated"
         }
 
-        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(languageRegion)&page=\(pageNum + 1)", type: ListPage<Movie>.self)
+        return try await dataSource.fetch(from: "https://api.themoviedb.org/3/movie/\(listName)?language=\(languageRegion)&page=\(pageNum + 1)", type: ListPage<Movie>.self)
     }
     
     func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails {
         
-        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)?language=\(languageRegion)&append_to_response=credits", type: MovieDetails.self)
-    }
-    
-    func fetchReviewsListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Review> {
-
-        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/reviews?language=\(languageRegion)&page=\(pageNum + 1)", type: ListPage<Review>.self)
+        return try await dataSource.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)?language=\(languageRegion)&append_to_response=credits", type: MovieDetails.self)
     }
     
     func fetchSimilarMoviesListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie> {
 
-        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/similar?language=\(languageRegion)&page=\(pageNum + 1)", type: ListPage<Movie>.self)
-    }
-    
-    func fetchCredits(for movieId: Int) async throws -> Credits {
-        
-        return try await service.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/credits?language=\(languageRegion)", type: Credits.self)
+        return try await dataSource.fetch(from: "https://api.themoviedb.org/3/movie/\(movieId)/similar?language=\(languageRegion)&page=\(pageNum + 1)", type: ListPage<Movie>.self)
     }
 
-    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails {
-        
-        return try await service.fetch(from: "https://api.themoviedb.org/3/person/\(personId)?language=\(languageRegion)", type: PersonDetails.self)
-    }
-
-    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails {
-        
-        return try await service.fetch(from: "https://api.themoviedb.org/3/company/\(companyId)", type: CompanyDetails.self)
-    }
-
-    func genre(for id: Int) async throws -> Genre? {
-
-        if genres.isEmpty {
-            let r = try await service.fetch(from: "https://api.themoviedb.org/3/genre/movie/list?language=\(languageRegion)", type: GenreList.self)
-
-            for genre in r.genres {
-                genres[genre.id] = genre
-            }
-        }
-        
-        return genres[id]
-    }
-    
     private var languageRegion: String {
         return NSLocale.preferredLanguages.first ?? "en-US"
     }

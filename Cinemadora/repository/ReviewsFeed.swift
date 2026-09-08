@@ -10,16 +10,17 @@ import Foundation
 @Observable
 final class ReviewsFeed : Feed {
     
-    private let movieRep: MovieRepository
+    private let repository: ReviewRepository
     private let movieId: Int
     
     private var nextPage = 0
     private var pageCount = 1
 
     
-    init(_ movieId: Int, _ movieRep: MovieRepository) {
+    init(_ movieId: Int, _ repository: ReviewRepository) {
+        
         self.movieId = movieId
-        self.movieRep = movieRep
+        self.repository = repository
     }
 
     private(set) var errorDescription = ""
@@ -51,7 +52,7 @@ final class ReviewsFeed : Feed {
         errorDescription = ""
             
         do {
-            let r = try await movieRep.fetchReviewsListPage(for: movieId, nextPage)
+            let r = try await repository.fetchReviewsListPage(for: movieId, nextPage)
                 
             items.append(contentsOf: r.results)
             pageCount = r.totalPageCount

@@ -57,7 +57,7 @@ struct ReviewView: View {
     }
     .preferredColorScheme(.dark)
     .task {
-        reviewState = try! await appContainer.movieRepository.fetchReviewsListPage(for: 550, 1).results[1]
+        reviewState = try! await appContainer.reviewRepository.fetchReviewsListPage(for: 550, 1).results[1]
     }
 }
 

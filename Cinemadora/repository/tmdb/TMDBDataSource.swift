@@ -1,5 +1,5 @@
 //
-//  TMDBService.swift
+//  TMDBDataSource.swift
 //  Cinemadora
 //
 //  Created by Dietmar Planitzer on 7/26/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated final class TMDBService : Sendable {
+nonisolated final class TMDBDataSource : Sendable {
     
     private let token: String
     

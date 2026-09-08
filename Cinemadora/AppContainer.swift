@@ -12,23 +12,38 @@ struct AppContainer {
     static func production() -> AppContainer {
         
         let token = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
-        let service = TMDBService(token)
-        let movieRep = TMDBMovieRepository(service)
-        let imageRep = TMDBImageRepository(service)
+        let dataSource = TMDBDataSource(token)
 
-        return AppContainer(movieRepository: movieRep, imageRepository: imageRep)
+        return AppContainer(
+            movieRepository: TMDBMovieRepository(dataSource),
+            imageRepository: TMDBImageRepository(dataSource),
+            genreRepository: TMDBGenreRepository(dataSource),
+            reviewRepository: TMDBReviewRepository(dataSource),
+            companyRepository: TMDBCompanyRepository(dataSource),
+            personRepository: TMDBPersonRepository(dataSource)
+        )
     }
     
     
     static func mocked() -> AppContainer {
         
-        let movieRep = MockMovieRepository()
-        let imageRep = MockImageRepository()
+        let dataSource = MockDataSource()
 
-        return AppContainer(movieRepository: movieRep, imageRepository: imageRep)
+        return AppContainer(
+            movieRepository: MockMovieRepository(dataSource),
+            imageRepository: MockImageRepository(),
+            genreRepository: MockGenreRepository(dataSource),
+            reviewRepository: MockReviewRepository(dataSource),
+            companyRepository: MockCompanyRepository(dataSource),
+            personRepository: MockPersonRepository(dataSource)
+        )
     }
 
     
     let movieRepository: MovieRepository
     let imageRepository: ImageRepository
+    let genreRepository: GenreRepository
+    let reviewRepository: ReviewRepository
+    let companyRepository: CompanyRepository
+    let personRepository: PersonRepository
 }

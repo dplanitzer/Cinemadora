@@ -18,24 +18,6 @@ protocol MovieRepository {
     func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie>
     
     func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails
-    
-    func fetchReviewsListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Review>
 
     func fetchSimilarMoviesListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie>
-
-    func fetchCredits(for movieId: Int) async throws -> Credits
-    
-    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails
-    
-    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails
-
-    func genre(for id: Int) async throws -> Genre?
-}
-
-
-extension MovieRepository {
-    
-    func reviewsFeed(for movieId: Int) -> ReviewsFeed {
-        return ReviewsFeed(movieId, self)
-    }
 }

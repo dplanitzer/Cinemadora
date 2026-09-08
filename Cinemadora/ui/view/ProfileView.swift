@@ -78,23 +78,17 @@ struct ProfileView: View {
 
 
 #Preview {
-    @State @Previewable var person: (any Person)? = nil
-    let appContainer = AppContainer.mocked()
+    @State @Previewable var model = MovieDetailsViewModel(550, AppContainer.mocked())
 
     Group {
-        if let person = person {
-            ProfileView(
-                person,
-                { (person: any Person) in
-                    return ImageLocator(appContainer.imageRepository, person.profilePath, .profile)
-                }
-            )
+        if let person = model.cast.first {
+            ProfileView(person, model.image(for:))
         } else {
             ProgressView()
         }
     }
     .preferredColorScheme(.dark)
     .task {
-        person = try! await appContainer.movieRepository.fetchCredits(for: 550).cast.first
+        await model.fetchDetails()
     }
 }

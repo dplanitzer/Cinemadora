@@ -9,14 +9,14 @@ import UIKit
 
 final class TMDBImageRepository : ImageRepository {
     
-    private let service: TMDBService
+    private let dataSource: TMDBDataSource
     private let imageCache: LRUCache<CacheKey, UIImage> = LRUCache()
     private let configurationCache: ConfigurationCache
     
     
-    init(_ service: TMDBService) {
-        self.service = service
-        self.configurationCache = ConfigurationCache(service)
+    init(_ dataSource: TMDBDataSource) {
+        self.dataSource = dataSource
+        self.configurationCache = ConfigurationCache(dataSource)
     }
     
     nonisolated func image(for basePath: String, usage: ImageUsage, size: ImageSizeClass) async throws -> UIImage {
@@ -106,18 +106,18 @@ final class TMDBImageRepository : ImageRepository {
 
     private actor ConfigurationCache {
         
-        private let service: TMDBService
+        private let dataSource: TMDBDataSource
         private var cachedConfiguration: TMDBConfiguration?
         
         
-        init(_ service: TMDBService) {
-            self.service = service
+        init(_ dataSource: TMDBDataSource) {
+            self.dataSource = dataSource
         }
         
         func withConfiguration<T>(_ closure: (_ configuration: TMDBConfiguration) async throws -> T) async throws -> T {
             
             if cachedConfiguration == nil {
-                cachedConfiguration = try await service.fetch(from: "https://api.themoviedb.org/3/configuration", type: TMDBConfiguration.self)
+                cachedConfiguration = try await dataSource.fetch(from: "https://api.themoviedb.org/3/configuration", type: TMDBConfiguration.self)
             }
             
             return try await closure(cachedConfiguration!)

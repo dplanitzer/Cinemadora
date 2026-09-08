@@ -44,7 +44,7 @@ final class MovieViewModel : Identifiable {
         do {
             genres = []
             for genreId in movie.genreIds {
-                if let genre = try await appContainer.movieRepository.genre(for: genreId) {
+                if let genre = try await appContainer.genreRepository.genre(for: genreId) {
                     genres.append(genre)
                 }
             }

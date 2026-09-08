@@ -9,64 +9,26 @@ import Foundation
 
 actor MockMovieRepository : MovieRepository {
     
-    private var genres: Dictionary<Int, Genre> = [:]
+    private let dataSource: MockDataSource
     
+    
+    init(_ dataSource: MockDataSource) {
+        
+        self.dataSource = dataSource
+    }
     
     func fetchMovieListPage(for list: ListName, _ pageNum: Int) async throws -> ListPage<Movie> {
         
-        return try await fetch(from: "popular_movies", type: ListPage<Movie>.self)
+        return try await dataSource.fetch(from: "popular_movies", type: ListPage<Movie>.self)
     }
 
     func fetchMovieDetails(for movieId: Int) async throws -> MovieDetails {
 
-        return try await fetch(from: "star_wars_movie_details", type: MovieDetails.self)
-    }
-
-    func fetchReviewsListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Review> {
-     
-        return try await fetch(from: "reviews", type: ListPage<Review>.self)
+        return try await dataSource.fetch(from: "star_wars_movie_details", type: MovieDetails.self)
     }
     
     func fetchSimilarMoviesListPage(for movieId: Int, _ pageNum: Int) async throws -> ListPage<Movie> {
         
-        return try await fetch(from: "popular_movies", type: ListPage<Movie>.self)
-    }
-    
-    func fetchCredits(for movieId: Int) async throws -> Credits {
-        
-        return try await fetch(from: "credits", type: Credits.self)
-    }
-
-    func fetchPersonDetails(for personId: Int) async throws -> PersonDetails {
-
-        return try await fetch(from: "tom_hanks", type: PersonDetails.self)
-    }
-
-    func fetchCompanyDetails(for companyId: Int) async throws -> CompanyDetails {
-
-        return try await fetch(from: "lucasfilm", type: CompanyDetails.self)
-    }
-
-    func genre(for id: Int) async throws -> Genre? {
-
-        if genres.isEmpty {
-            let r = try await fetch(from: "movie_genres", type: GenreList.self)
-
-            for genre in r.genres {
-                genres[genre.id] = genre
-            }
-        }
-        
-        return genres[id]
-    }
-
-    private func fetch<T: Decodable>(from fileName: String, type: T.Type) async throws -> T {
-        
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
-            throw RepositoryError(URLError(.fileDoesNotExist))
-        }
-        
-        try await Task.sleep(nanoseconds: 1_500_000_000)
-        return try JSONDecoder().decode(type, from: try Data(contentsOf: url))
+        return try await dataSource.fetch(from: "popular_movies", type: ListPage<Movie>.self)
     }
 }

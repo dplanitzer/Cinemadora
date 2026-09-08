@@ -26,7 +26,7 @@ final class PersonDetailsViewModel : Identifiable {
         guard details == nil else { return }
         
         do {
-            details = try await appContainer.movieRepository.fetchPersonDetails(for: id)
+            details = try await appContainer.personRepository.fetchPersonDetails(for: id)
         } catch {
             print(error.localizedDescription)
         }
